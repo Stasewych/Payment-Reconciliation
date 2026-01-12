@@ -980,6 +980,12 @@
                 <select id="monthSelect">
                     <option value="">Оберіть місяць</option>
                 </select>
+                <div style="margin-top: 16px; display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="showOlderMonths" style="width: auto; cursor: pointer;">
+                    <label for="showOlderMonths" style="font-size: 13px; color: var(--gray-600); cursor: pointer; user-select: none;">
+                        Показати місяці старіше одного місяця
+                    </label>
+                </div>
             </div>
 
             <div class="validation-errors" id="validationErrors">
@@ -1058,25 +1064,68 @@
         });
 
         // Генеруємо список місяців
-        function generateMonthOptions() {
+        function generateMonthOptions(showAll = false) {
             const months = [
                 'Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень',
                 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'
             ];
             const select = document.getElementById('monthSelect');
-            const currentYear = new Date().getFullYear();
+            const currentValue = select.value; // Зберігаємо поточний вибір
             
-            for (let year = currentYear - 1; year <= currentYear + 1; year++) {
-                months.forEach((month) => {
+            // Очищаємо всі опції крім першої
+            select.innerHTML = '<option value="">Оберіть місяць</option>';
+            
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth(); // 0-11
+            
+            // Обчислюємо дату "місяць тому"
+            const oneMonthAgo = new Date(currentYear, currentMonth - 1, 1);
+            
+            // Генеруємо опції від поточного року мінус 2 роки до поточного року плюс 1 рік
+            for (let year = currentYear - 2; year <= currentYear + 1; year++) {
+                months.forEach((month, index) => {
+                    const monthDate = new Date(year, index, 1);
+                    
+                    // Якщо showAll === false, показуємо тільки останній місяць та поточний
+                    if (!showAll) {
+                        // Показуємо тільки якщо дата >= "місяць тому"
+                        if (monthDate < oneMonthAgo) {
+                            return; // Пропускаємо старіші місяці
+                        }
+                    }
+                    
                     const option = document.createElement('option');
                     option.value = `Оплата ${month} ${year}`;
                     option.textContent = `${month} ${year}`;
+                    
+                    // Виділяємо поточний місяць
+                    if (year === currentYear && index === currentMonth) {
+                        option.textContent += ' (поточний)';
+                    }
+                    
                     select.appendChild(option);
                 });
             }
+            
+            // Відновлюємо попередній вибір якщо він все ще доступний
+            if (currentValue) {
+                const options = Array.from(select.options);
+                const matchingOption = options.find(opt => opt.value === currentValue);
+                if (matchingOption) {
+                    select.value = currentValue;
+                }
+            }
         }
 
-        generateMonthOptions();
+        // Ініціалізуємо з обмеженням
+        generateMonthOptions(false);
+        
+        // Обробка чекбоксу
+        document.getElementById('showOlderMonths').addEventListener('change', function(e) {
+            generateMonthOptions(e.target.checked);
+            checkReadyToProcess();
+        });
 
         let file1Data = null;
         let file2Data = null;
