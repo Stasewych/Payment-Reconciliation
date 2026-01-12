@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Система звірки платежів | Just Solution</title>
     <link rel="icon" type="image/png" href="https://i.ibb.co/R49xRb5r/2026-01-12-19-28-01.png">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -1133,91 +1133,121 @@
         let validationErrors = [];
 
         // Функції валідації
-        function validateFile1(workbook) {
+        async function validateFile1(arrayBuffer) {
             const errors = [];
             
-            if (!workbook || !workbook.SheetNames || workbook.SheetNames.length === 0) {
-                errors.push('Файл не містить жодного аркуша');
-                return errors;
-            }
-
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            const data = XLSX.utils.sheet_to_json(sheet, {header: 1, defval: null});
-            
-            if (data.length === 0) {
-                errors.push('Файл пустий');
-                return errors;
-            }
-
-            const headers = data[0];
-            
-            if (!headers.includes('ПІП Позичальника')) {
-                errors.push('Відсутня обов\'язкова колонка: "ПІП Позичальника"');
-            }
-            
-            if (!headers.includes('ІПН Позичальника')) {
-                errors.push('Відсутня обов\'язкова колонка: "ІПН Позичальника"');
-            }
-
-            if (data.length < 2) {
-                errors.push('Відсутні рядки з даними (лише заголовки)');
-                return errors;
-            }
-
-            const pipColumnIndex = headers.indexOf('ПІП Позичальника');
-            let hasValidData = false;
-            for (let i = 1; i < Math.min(data.length, 10); i++) {
-                if (data[i][pipColumnIndex] && data[i][pipColumnIndex].toString().trim()) {
-                    hasValidData = true;
-                    break;
+            try {
+                const workbook = new ExcelJS.Workbook();
+                await workbook.xlsx.load(arrayBuffer);
+                
+                if (!workbook.worksheets || workbook.worksheets.length === 0) {
+                    errors.push('Файл не містить жодного аркуша');
+                    return errors;
                 }
-            }
-            
-            if (!hasValidData) {
-                errors.push('Не знайдено валідних ПІБ у перших 10 рядках');
-            }
 
-            return errors;
+                // Перевіряємо чи є аркуш "Загальний"
+                const zagalniySheet = workbook.worksheets.find(sheet => 
+                    sheet.name.toLowerCase().trim() === 'загальний'
+                );
+                
+                if (!zagalniySheet) {
+                    const sheetNames = workbook.worksheets.map(s => s.name).join(', ');
+                    errors.push(`Відсутній обов'язковий аркуш "Загальний". Знайдені аркуші: ${sheetNames}`);
+                    return errors;
+                }
+
+                if (zagalniySheet.rowCount === 0) {
+                    errors.push('Аркуш "Загальний" пустий');
+                    return errors;
+                }
+
+                // Перевіряємо заголовки (перший рядок)
+                const headerRow = zagalniySheet.getRow(1);
+                const headers = [];
+                headerRow.eachCell((cell) => {
+                    headers.push(cell.value);
+                });
+                
+                if (!headers.includes('ПІП Позичальника')) {
+                    errors.push('Відсутня обов\'язкова колонка: "ПІП Позичальника"');
+                }
+                
+                if (!headers.includes('ІПН Позичальника')) {
+                    errors.push('Відсутня обов\'язкова колонка: "ІПН Позичальника"');
+                }
+
+                if (zagalniySheet.rowCount < 2) {
+                    errors.push('Відсутні рядки з даними (лише заголовки)');
+                    return errors;
+                }
+
+                const pipColumnIndex = headers.indexOf('ПІП Позичальника') + 1; // ExcelJS uses 1-based indexing
+                let hasValidData = false;
+                
+                for (let i = 2; i <= Math.min(zagalniySheet.rowCount, 11); i++) {
+                    const cell = zagalniySheet.getRow(i).getCell(pipColumnIndex);
+                    if (cell.value && cell.value.toString().trim()) {
+                        hasValidData = true;
+                        break;
+                    }
+                }
+                
+                if (!hasValidData) {
+                    errors.push('Не знайдено валідних ПІБ у перших 10 рядках');
+                }
+
+                return errors;
+            } catch (error) {
+                errors.push(`Помилка читання файлу: ${error.message}`);
+                return errors;
+            }
         }
 
-        function validateFile2(workbook) {
+        async function validateFile2(arrayBuffer) {
             const errors = [];
             
-            if (!workbook || !workbook.SheetNames || workbook.SheetNames.length === 0) {
-                errors.push('Файл не містить жодного аркуша');
-                return errors;
-            }
-
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            const data = XLSX.utils.sheet_to_json(sheet, {header: 1, defval: null});
-            
-            if (data.length === 0) {
-                errors.push('Файл пустий');
-                return errors;
-            }
-
-            if (data.length < 5) {
-                errors.push('Недостатньо даних (мінімум 5 рядків)');
-                return errors;
-            }
-
-            let hasValidPayments = false;
-            for (let i = 4; i < Math.min(data.length, 20); i++) {
-                const row = data[i];
-                const pipCell = row[4];
-                const amountCell = row[9];
+            try {
+                const workbook = new ExcelJS.Workbook();
+                await workbook.xlsx.load(arrayBuffer);
                 
-                if (pipCell && amountCell) {
-                    hasValidPayments = true;
-                    break;
+                if (!workbook.worksheets || workbook.worksheets.length === 0) {
+                    errors.push('Файл не містить жодного аркуша');
+                    return errors;
                 }
-            }
-            
-            if (!hasValidPayments) {
-                errors.push('Не знайдено валідних платіжних записів у колонках E та J');
-            }
 
-            return errors;
+                const sheet = workbook.worksheets[0];
+                
+                if (sheet.rowCount === 0) {
+                    errors.push('Файл пустий');
+                    return errors;
+                }
+
+                if (sheet.rowCount < 5) {
+                    errors.push('Недостатньо даних (мінімум 5 рядків)');
+                    return errors;
+                }
+
+                let hasValidPayments = false;
+                for (let i = 5; i <= Math.min(sheet.rowCount, 20); i++) {
+                    const row = sheet.getRow(i);
+                    const pipCell = row.getCell(5); // Column E
+                    const amountCell = row.getCell(10); // Column J
+                    
+                    if (pipCell.value && amountCell.value) {
+                        hasValidPayments = true;
+                        break;
+                    }
+                }
+                
+                if (!hasValidPayments) {
+                    errors.push('Не знайдено валідних платіжних записів у колонках E та J');
+                }
+
+                return errors;
+            } catch (error) {
+                errors.push(`Помилка читання файлу: ${error.message}`);
+                return errors;
+            }
         }
 
         function showValidationErrors(errors) {
@@ -1239,7 +1269,7 @@
         }
 
         // Обробка завантаження файлів
-        document.getElementById('file1').addEventListener('change', function(e) {
+        document.getElementById('file1').addEventListener('change', async function(e) {
             const file = e.target.files[0];
             if (file) {
                 const label = document.getElementById('label1');
@@ -1253,12 +1283,11 @@
                 `;
                 
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    const data = new Uint8Array(e.target.result);
+                reader.onload = async function(e) {
+                    const arrayBuffer = e.target.result;
                     try {
-                        file1Data = XLSX.read(data, {type: 'array'});
-                        
-                        const errors = validateFile1(file1Data);
+                        // Валідація
+                        const errors = await validateFile1(arrayBuffer);
                         validationErrors = validationErrors.filter(e => !e.startsWith('Файл 1'));
                         
                         if (errors.length > 0) {
@@ -1278,10 +1307,25 @@
                             showValidationErrors(validationErrors);
                             file1Data = null;
                         } else {
+                            // Зберігаємо файл
+                            file1Data = arrayBuffer;
+                            
+                            // Читаємо для показу інформації
+                            const workbook = new ExcelJS.Workbook();
+                            await workbook.xlsx.load(arrayBuffer);
+                            
+                            const zagalniySheet = workbook.worksheets.find(sheet => 
+                                sheet.name.toLowerCase().trim() === 'загальний'
+                            );
+                            
+                            const rowCount = zagalniySheet.rowCount - 1;
+                            
+                            let sheetsInfo = '';
+                            if (workbook.worksheets.length > 1) {
+                                sheetsInfo = ` • ${workbook.worksheets.length} аркушів`;
+                            }
+                            
                             label.classList.add('has-file');
-                            const sheet = file1Data.Sheets[file1Data.SheetNames[0]];
-                            const data = XLSX.utils.sheet_to_json(sheet, {header: 1});
-                            const rowCount = data.length - 1;
                             label.innerHTML = `
                                 <div class="file-icon">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1290,7 +1334,7 @@
                                 </div>
                                 <div class="file-details">
                                     <div class="file-name">${file.name}</div>
-                                    <div class="file-info">${rowCount.toLocaleString('uk-UA')} боржників у реєстрі</div>
+                                    <div class="file-info">${rowCount.toLocaleString('uk-UA')} боржників у реєстрі${sheetsInfo}</div>
                                 </div>
                             `;
                             
@@ -1322,7 +1366,7 @@
             }
         });
 
-        document.getElementById('file2').addEventListener('change', function(e) {
+        document.getElementById('file2').addEventListener('change', async function(e) {
             const file = e.target.files[0];
             if (file) {
                 const label = document.getElementById('label2');
@@ -1336,12 +1380,11 @@
                 `;
                 
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    const data = new Uint8Array(e.target.result);
+                reader.onload = async function(e) {
+                    const arrayBuffer = e.target.result;
                     try {
-                        file2Data = XLSX.read(data, {type: 'array'});
-                        
-                        const errors = validateFile2(file2Data);
+                        // Валідація
+                        const errors = await validateFile2(arrayBuffer);
                         validationErrors = validationErrors.filter(e => !e.startsWith('Файл 2'));
                         
                         if (errors.length > 0) {
@@ -1361,10 +1404,16 @@
                             showValidationErrors(validationErrors);
                             file2Data = null;
                         } else {
+                            // Зберігаємо файл
+                            file2Data = arrayBuffer;
+                            
+                            // Читаємо для показу інформації
+                            const workbook = new ExcelJS.Workbook();
+                            await workbook.xlsx.load(arrayBuffer);
+                            const sheet = workbook.worksheets[0];
+                            const paymentCount = sheet.rowCount - 4;
+                            
                             label.classList.add('has-file');
-                            const sheet = file2Data.Sheets[file2Data.SheetNames[0]];
-                            const data = XLSX.utils.sheet_to_json(sheet, {header: 1});
-                            const paymentCount = data.length - 4;
                             label.innerHTML = `
                                 <div class="file-icon">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1467,19 +1516,36 @@
 
                 const monthColumn = document.getElementById('monthSelect').value;
                 
-                const sheet1Name = file1Data.SheetNames[0];
-                const sheet1 = file1Data.Sheets[sheet1Name];
-                const data1 = XLSX.utils.sheet_to_json(sheet1, {header: 1, defval: null});
+                // Завантажуємо обидва файли
+                const workbook1 = new ExcelJS.Workbook();
+                await workbook1.xlsx.load(file1Data);
                 
-                const sheet2Name = file2Data.SheetNames[0];
-                const sheet2 = file2Data.Sheets[sheet2Name];
-                const data2 = XLSX.utils.sheet_to_json(sheet2, {header: 1, defval: null});
+                const workbook2 = new ExcelJS.Workbook();
+                await workbook2.xlsx.load(file2Data);
 
                 updateProgress(20, 'Аналіз структури...', 'Пошук необхідних колонок');
                 await delay(400);
                 
-                const headers1 = data1[0];
-                const pipColumnIndex = headers1.indexOf('ПІП Позичальника');
+                // Знаходимо аркуш "Загальний" в файлі 1
+                const zagalniySheet = workbook1.worksheets.find(sheet => 
+                    sheet.name.toLowerCase().trim() === 'загальний'
+                );
+                
+                if (!zagalniySheet) {
+                    throw new Error('Аркуш "Загальний" не знайдено у файлі боржників');
+                }
+                
+                // Отримуємо заголовки з першого рядка
+                const headerRow = zagalniySheet.getRow(1);
+                const headers = [];
+                let pipColumnIndex = -1;
+                
+                headerRow.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                    headers.push(cell.value);
+                    if (cell.value === 'ПІП Позичальника') {
+                        pipColumnIndex = colNumber;
+                    }
+                });
                 
                 if (pipColumnIndex === -1) {
                     throw new Error('Колонку "ПІП Позичальника" не знайдено');
@@ -1490,29 +1556,30 @@
                 
                 let newColumnName = monthColumn;
                 let counter = 2;
-                while (headers1.includes(newColumnName)) {
+                while (headers.includes(newColumnName)) {
                     newColumnName = `${monthColumn} (${counter})`;
                     counter++;
                 }
                 
                 const newColumnIndex = pipColumnIndex + 1;
-                headers1.splice(newColumnIndex, 0, newColumnName);
 
                 updateProgress(40, 'Збір платежів...', 'Обробка даних бухгалтерії');
                 await delay(500);
                 
+                // Збираємо платежі з файлу 2
+                const sheet2 = workbook2.worksheets[0];
                 const payments = {};
                 const notFoundPeople = [];
                 
-                for (let i = 4; i < data2.length; i++) {
-                    const row = data2[i];
-                    const pipCell = row[4];
-                    const amountCell = row[9];
+                for (let i = 5; i <= sheet2.rowCount; i++) {
+                    const row = sheet2.getRow(i);
+                    const pipCell = row.getCell(5); // Column E
+                    const amountCell = row.getCell(10); // Column J
                     
-                    if (pipCell && amountCell) {
-                        const normalizedPip = normalizeName(pipCell);
+                    if (pipCell.value && amountCell.value) {
+                        const normalizedPip = normalizeName(pipCell.value);
                         if (normalizedPip) {
-                            const amount = parseFloat(amountCell);
+                            const amount = parseFloat(amountCell.value);
                             if (!isNaN(amount)) {
                                 payments[normalizedPip] = (payments[normalizedPip] || 0) + amount;
                             }
@@ -1524,11 +1591,13 @@
                 updateProgress(50, `Знайдено ${paymentCount} платежів`, 'Створення індексу боржників');
                 await delay(400);
 
+                // Створюємо мапу боржників
                 const debtorsMap = {};
-                for (let i = 1; i < data1.length; i++) {
-                    const pip = data1[i][pipColumnIndex];
-                    if (pip) {
-                        const normalizedPip = normalizeName(pip);
+                for (let i = 2; i <= zagalniySheet.rowCount; i++) {
+                    const row = zagalniySheet.getRow(i);
+                    const pipCell = row.getCell(pipColumnIndex);
+                    if (pipCell.value) {
+                        const normalizedPip = normalizeName(pipCell.value);
                         debtorsMap[normalizedPip] = i;
                     }
                 }
@@ -1536,8 +1605,17 @@
                 updateProgress(60, 'Підготовка колонки...', 'Вставка нової колонки');
                 await delay(300);
                 
-                for (let i = 1; i < data1.length; i++) {
-                    data1[i].splice(newColumnIndex, 0, null);
+                // Вставляємо нову колонку зі збереженням форматування
+                zagalniySheet.spliceColumns(newColumnIndex, 0, []);
+                
+                // Встановлюємо заголовок нової колонки
+                const newHeaderCell = zagalniySheet.getRow(1).getCell(newColumnIndex);
+                newHeaderCell.value = newColumnName;
+                
+                // Копіюємо стиль з сусідньої колонки
+                const referenceCell = zagalniySheet.getRow(1).getCell(pipColumnIndex);
+                if (referenceCell.style) {
+                    newHeaderCell.style = Object.assign({}, referenceCell.style);
                 }
 
                 updateProgress(70, 'Обробка платежів...', 'Зіставлення платежів з боржниками');
@@ -1559,15 +1637,30 @@
                     const rowIndex = debtorsMap[normalizedPip];
                     
                     if (rowIndex !== undefined) {
-                        data1[rowIndex][newColumnIndex] = amount;
+                        const row = zagalniySheet.getRow(rowIndex);
+                        const cell = row.getCell(newColumnIndex);
+                        cell.value = amount;
+                        
+                        // Копіюємо стиль з сусідньої колонки
+                        const referenceCell = row.getCell(pipColumnIndex);
+                        if (referenceCell.style) {
+                            cell.style = Object.assign({}, referenceCell.style);
+                        }
+                        
+                        // Форматування числа
+                        cell.numFmt = '#,##0.00';
+                        
                         matchedCount++;
                         totalAmount += amount;
                     } else {
-                        for (let i = 4; i < data2.length; i++) {
-                            const pipCell = data2[i][4];
-                            if (pipCell && normalizeName(pipCell) === normalizedPip) {
+                        // Знаходимо оригінальне ім'я для списку не знайдених
+                        for (let i = 5; i <= sheet2.rowCount; i++) {
+                            const pipCell = sheet2.getRow(i).getCell(5);
+                            if (pipCell.value && normalizeName(pipCell.value) === normalizedPip) {
+                                let name = pipCell.value.toString();
+                                name = name.split('\n')[0].trim();
                                 notFoundPeople.push({
-                                    name: pipCell.split('\n')[0].trim(),
+                                    name: name,
                                     amount: amount
                                 });
                                 break;
@@ -1579,11 +1672,8 @@
                 updateProgress(90, 'Створення файлу...', 'Генерація фінального документу');
                 await delay(500);
                 
-                const newWorkbook = XLSX.utils.book_new();
-                const newSheet = XLSX.utils.aoa_to_sheet(data1);
-                XLSX.utils.book_append_sheet(newWorkbook, newSheet, sheet1Name);
-                
-                processedWorkbook = newWorkbook;
+                // Зберігаємо оброблений workbook
+                processedWorkbook = workbook1;
 
                 updateProgress(100, 'Завершено', 'Обробку файлу успішно виконано');
                 await delay(500);
@@ -1657,14 +1747,29 @@
             resultsDiv.classList.add('show');
         }
 
-        function downloadFile() {
+        async function downloadFile() {
             if (processedWorkbook) {
                 const monthName = document.getElementById('monthSelect').value
                     .replace('Оплата ', '')
                     .replace(/ /g, '_');
                 const fileName = `Реєстр_боржників_${monthName}.xlsx`;
                 
-                XLSX.writeFile(processedWorkbook, fileName);
+                // Генеруємо файл
+                const buffer = await processedWorkbook.xlsx.writeBuffer();
+                
+                // Створюємо Blob та завантажуємо
+                const blob = new Blob([buffer], { 
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+                });
+                
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
             }
         }
     </script>
