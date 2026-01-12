@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система звірки платежів | Just Solution</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/R49xRb5r/2026-01-12-19-28-01.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray-50: #FAFAFA;
+            --gray-100: #F5F5F5;
+            --gray-200: #E8E8E8;
+            --gray-300: #D1D1D1;
+            --gray-400: #A3A3A3;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+        }
+
+        body {
+            font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            letter-spacing: -0.01em;
+        }
+
+        .login-container {
+            background: var(--white);
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03),
+                        0 8px 24px rgba(0, 0, 0, 0.04),
+                        0 24px 48px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-header {
+            padding: 48px 48px 40px;
+            border-bottom: 1px solid var(--gray-200);
+            text-align: center;
+        }
+
+        .logo {
+            width: 300px;
+            height: auto;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+        }
+
+        .login-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        .login-form {
+            padding: 40px 48px 48px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray-500);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-200);
+            background: var(--white);
+            font-size: 15px;
+            font-family: 'Work Sans', sans-serif;
+            color: var(--black);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--black);
+        }
+
+        .form-input.error {
+            border-color: var(--error);
+        }
+
+        .error-message {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: var(--gray-50);
+            border-left: 3px solid var(--black);
+            font-size: 13px;
+            color: var(--gray-700);
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Work Sans', sans-serif;
+            margin-top: 8px;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--white);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 0;
+        }
+
+        .login-btn:hover:not(:disabled)::before {
+            transform: scaleX(1);
+        }
+
+        .login-btn:hover:not(:disabled) {
+            color: var(--black);
+        }
+
+        .login-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .container {
+            background: var(--white);
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03),
+                        0 8px 24px rgba(0, 0, 0, 0.04),
+                        0 24px 48px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+
+        .container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            padding: 48px 56px 40px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--white);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 56px;
+            right: 56px;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--black) 50%, 
+                transparent 100%);
+            opacity: 0.1;
+        }
+
+        .logo-main {
+            width: 200px;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .logo-main img {
+            width: 100%;
+            height: auto;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--gray-300);
+            color: var(--gray-600);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Work Sans', sans-serif;
+        }
+
+        .logout-btn:hover {
+            border-color: var(--black);
+            color: var(--black);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--black);
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--gray-500);
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }
+
+        .content {
+            padding: 48px 56px 56px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray-500);
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--black);
+            color: var(--white);
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-input-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--black);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .file-input-label:hover {
+            border-color: var(--gray-300);
+            background: var(--gray-50);
+        }
+
+        .file-input-label:hover::before {
+            transform: scaleX(1);
+        }
+
+        .file-input-label.has-file {
+            background: var(--black);
+            border-color: var(--black);
+            color: var(--white);
+        }
+
+        .file-input-label.has-file::before {
+            transform: scaleX(1);
+            background: var(--white);
+        }
+
+        .file-input-label.error {
+            background: var(--white);
+            border-color: var(--black);
+        }
+
+        .file-input-label.error::before {
+            background: var(--black);
+            transform: scaleX(1);
+        }
+
+        .file-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gray-100);
+            border-radius: 4px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-label.has-file .file-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .file-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--gray-600);
+            stroke-width: 1.5;
+        }
+
+        .file-input-label.has-file .file-icon svg {
+            stroke: var(--white);
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 500;
+            font-size: 15px;
+            color: var(--black);
+            margin-bottom: 4px;
+            letter-spacing: -0.01em;
+        }
+
+        .file-input-label.has-file .file-name {
+            color: var(--white);
+        }
+
+        .file-info {
+            font-size: 13px;
+            color: var(--gray-500);
+            font-weight: 400;
+        }
+
+        .file-input-label.has-file .file-info {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .file-input-label.error .file-info {
+            color: var(--gray-600);
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-300);
+            border-top-color: var(--black);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--gray-200);
+            background: var(--white);
+            font-size: 15px;
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 400;
+            color: var(--black);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23000000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            padding-right: 48px;
+        }
+
+        select:hover {
+            border-color: var(--gray-300);
+            background-color: var(--gray-50);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--black);
+        }
+
+        .validation-errors {
+            margin-top: 32px;
+            padding: 24px;
+            background: var(--gray-50);
+            border-left: 3px solid var(--black);
+            display: none;
+        }
+
+        .validation-errors.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .validation-errors h3 {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 16px;
+        }
+
+        .validation-errors ul {
+            margin-left: 0;
+            list-style: none;
+        }
+
+        .validation-errors li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 14px;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .validation-errors li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 9px;
+            width: 4px;
+            height: 4px;
+            background: var(--black);
+            border-radius: 50%;
+        }
+
+        .process-btn {
+            width: 100%;
+            padding: 20px;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Work Sans', sans-serif;
+        }
+
+        .process-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--white);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 0;
+        }
+
+        .process-btn:hover:not(:disabled)::before {
+            transform: scaleX(1);
+        }
+
+        .process-btn:hover:not(:disabled) {
+            color: var(--black);
+        }
+
+        .process-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .process-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .progress-container {
+            margin-top: 40px;
+            display: none;
+        }
+
+        .progress-container.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .progress-status {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 16px;
+        }
+
+        .progress-bar-wrapper {
+            width: 100%;
+            height: 2px;
+            background: var(--gray-200);
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--black);
+            width: 0%;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-details {
+            font-size: 13px;
+            color: var(--gray-500);
+            font-weight: 400;
+        }
+
+        .results {
+            margin-top: 48px;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-item {
+            margin-bottom: 24px;
+            padding: 28px 32px;
+            background: var(--gray-50);
+            border-left: 3px solid var(--black);
+            position: relative;
+        }
+
+        .result-item.success {
+            background: var(--black);
+            color: var(--white);
+            border-left-color: var(--white);
+        }
+
+        .result-item.warning {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-left: 3px solid var(--gray-600);
+        }
+
+        .result-item.error {
+            background: var(--gray-800);
+            color: var(--white);
+            border-left-color: var(--white);
+        }
+
+        .result-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .result-item.success .result-title {
+            color: var(--white);
+        }
+
+        .result-item.warning .result-title {
+            color: var(--gray-700);
+        }
+
+        .result-item.error .result-title {
+            color: var(--white);
+        }
+
+        .result-details {
+            font-size: 15px;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .result-item.success .result-details {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .result-item.warning .result-details {
+            color: var(--gray-600);
+        }
+
+        .result-item.error .result-details {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .result-details strong {
+            font-weight: 600;
+            color: inherit;
+        }
+
+        .result-item.success .result-details strong {
+            color: var(--white);
+        }
+
+        .not-found-list {
+            max-height: 240px;
+            overflow-y: auto;
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            font-size: 14px;
+        }
+
+        .not-found-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .not-found-list::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+
+        .not-found-list::-webkit-scrollbar-thumb {
+            background: var(--gray-400);
+        }
+
+        .not-found-list div {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-200);
+            color: var(--gray-700);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .not-found-list div:last-child {
+            border-bottom: none;
+        }
+
+        .not-found-list strong {
+            font-weight: 500;
+            color: var(--black);
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 20px;
+            background: var(--white);
+            color: var(--black);
+            border: 2px solid var(--black);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Work Sans', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--black);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 0;
+        }
+
+        .download-btn:hover::before {
+            transform: scaleX(1);
+        }
+
+        .download-btn:hover {
+            color: var(--white);
+        }
+
+        .download-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer {
+            padding: 24px 56px;
+            border-top: 1px solid var(--gray-200);
+            background: var(--gray-50);
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 11px;
+            color: var(--gray-500);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .footer-brand {
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 32px 28px 24px;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .header::after {
+                left: 28px;
+                right: 28px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .content {
+                padding: 32px 28px 40px;
+            }
+
+            .footer {
+                padding: 20px 28px;
+            }
+
+            .section-label {
+                font-size: 10px;
+            }
+
+            .file-input-label {
+                padding: 20px;
+            }
+
+            .file-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .login-container {
+                margin: 20px;
+            }
+
+            .login-header,
+            .login-form {
+                padding: 32px 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Екран логіну -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-header">
+            <div class="logo">
+                <img src="https://i.ibb.co/R49xRb5r/2026-01-12-19-28-01.png" alt="Just Solution" />
+            </div>
+            <h2 class="login-title">Вхід до системи</h2>
+            <p class="login-subtitle">Система звірки платежів</p>
+        </div>
+        <form class="login-form" id="loginForm">
+            <div class="form-group">
+                <label class="form-label">Логін</label>
+                <input type="text" class="form-input" id="username" autocomplete="username" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Пароль</label>
+                <input type="password" class="form-input" id="password" autocomplete="current-password" />
+            </div>
+            <div class="error-message" id="loginError">
+                Невірний логін або пароль
+            </div>
+            <button type="submit" class="login-btn">
+                <span>Увійти до системи</span>
+            </button>
+        </form>
+    </div>
+
+    <!-- Головна програма -->
+    <div class="container" id="mainContainer">
+        <div class="header">
+            <div class="logo-main">
+                <img src="https://i.ibb.co/R49xRb5r/2026-01-12-19-28-01.png" alt="Just Solution" />
+            </div>
+            <div class="header-content">
+                <h1>Звірка платежів</h1>
+                <p class="subtitle">Автоматизована система обробки платежів боржників</p>
+            </div>
+            <button class="logout-btn" onclick="logout()">Вийти</button>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <div class="section-label">
+                    <span class="section-number">1</span>
+                    Файл реєстру боржників
+                </div>
+                <div class="file-input-wrapper">
+                    <input type="file" id="file1" accept=".xlsx" />
+                    <label for="file1" class="file-input-label" id="label1">
+                        <div class="file-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-name">Оберіть основний реєстр</div>
+                            <div class="file-info">Excel файл з інформацією про боржників</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-label">
+                    <span class="section-number">2</span>
+                    Звіт бухгалтерії
+                </div>
+                <div class="file-input-wrapper">
+                    <input type="file" id="file2" accept=".xlsx" />
+                    <label for="file2" class="file-input-label" id="label2">
+                        <div class="file-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-name">Оберіть звіт про платежі</div>
+                            <div class="file-info">Місячний звіт про транзакції від бухгалтерії</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-label">
+                    <span class="section-number">3</span>
+                    Звітний період
+                </div>
+                <select id="monthSelect">
+                    <option value="">Оберіть місяць</option>
+                </select>
+            </div>
+
+            <div class="validation-errors" id="validationErrors">
+                <h3>Помилки валідації</h3>
+                <ul id="errorList"></ul>
+            </div>
+
+            <button class="process-btn" id="processBtn" disabled>
+                <span>Виконати обробку</span>
+            </button>
+
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-status" id="progressStatus">Ініціалізація...</div>
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="progress-details" id="progressDetails"></div>
+            </div>
+
+            <div class="results" id="results"></div>
+        </div>
+
+        <div class="footer">
+            <p class="footer-text">Розроблено <span class="footer-brand">Just Solution</span> • Legal Technology</p>
+        </div>
+    </div>
+
+    <script>
+        // Константи для авторизації
+        const CREDENTIALS = {
+            username: 'AuxiliumUser',
+            password: 'Auxilium2026!'
+        };
+
+        // Обробка форми логіну
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('loginError');
+            
+            if (username === CREDENTIALS.username && password === CREDENTIALS.password) {
+                errorMessage.classList.remove('show');
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('mainContainer').classList.add('show');
+                sessionStorage.setItem('authenticated', 'true');
+            } else {
+                errorMessage.classList.add('show');
+                document.getElementById('username').classList.add('error');
+                document.getElementById('password').classList.add('error');
+                
+                setTimeout(() => {
+                    document.getElementById('username').classList.remove('error');
+                    document.getElementById('password').classList.remove('error');
+                }, 2000);
+            }
+        });
+
+        // Функція виходу
+        function logout() {
+            sessionStorage.removeItem('authenticated');
+            document.getElementById('mainContainer').classList.remove('show');
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('loginError').classList.remove('show');
+        }
+
+        // Перевірка авторизації при завантаженні
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('authenticated') === 'true') {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('mainContainer').classList.add('show');
+            }
+        });
+
+        // Генеруємо список місяців
+        function generateMonthOptions() {
+            const months = [
+                'Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень',
+                'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'
+            ];
+            const select = document.getElementById('monthSelect');
+            const currentYear = new Date().getFullYear();
+            
+            for (let year = currentYear - 1; year <= currentYear + 1; year++) {
+                months.forEach((month) => {
+                    const option = document.createElement('option');
+                    option.value = `Оплата ${month} ${year}`;
+                    option.textContent = `${month} ${year}`;
+                    select.appendChild(option);
+                });
+            }
+        }
+
+        generateMonthOptions();
+
+        let file1Data = null;
+        let file2Data = null;
+        let processedWorkbook = null;
+        let validationErrors = [];
+
+        // Функції валідації
+        function validateFile1(workbook) {
+            const errors = [];
+            
+            if (!workbook || !workbook.SheetNames || workbook.SheetNames.length === 0) {
+                errors.push('Файл не містить жодного аркуша');
+                return errors;
+            }
+
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const data = XLSX.utils.sheet_to_json(sheet, {header: 1, defval: null});
+            
+            if (data.length === 0) {
+                errors.push('Файл пустий');
+                return errors;
+            }
+
+            const headers = data[0];
+            
+            if (!headers.includes('ПІП Позичальника')) {
+                errors.push('Відсутня обов\'язкова колонка: "ПІП Позичальника"');
+            }
+            
+            if (!headers.includes('ІПН Позичальника')) {
+                errors.push('Відсутня обов\'язкова колонка: "ІПН Позичальника"');
+            }
+
+            if (data.length < 2) {
+                errors.push('Відсутні рядки з даними (лише заголовки)');
+                return errors;
+            }
+
+            const pipColumnIndex = headers.indexOf('ПІП Позичальника');
+            let hasValidData = false;
+            for (let i = 1; i < Math.min(data.length, 10); i++) {
+                if (data[i][pipColumnIndex] && data[i][pipColumnIndex].toString().trim()) {
+                    hasValidData = true;
+                    break;
+                }
+            }
+            
+            if (!hasValidData) {
+                errors.push('Не знайдено валідних ПІБ у перших 10 рядках');
+            }
+
+            return errors;
+        }
+
+        function validateFile2(workbook) {
+            const errors = [];
+            
+            if (!workbook || !workbook.SheetNames || workbook.SheetNames.length === 0) {
+                errors.push('Файл не містить жодного аркуша');
+                return errors;
+            }
+
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const data = XLSX.utils.sheet_to_json(sheet, {header: 1, defval: null});
+            
+            if (data.length === 0) {
+                errors.push('Файл пустий');
+                return errors;
+            }
+
+            if (data.length < 5) {
+                errors.push('Недостатньо даних (мінімум 5 рядків)');
+                return errors;
+            }
+
+            let hasValidPayments = false;
+            for (let i = 4; i < Math.min(data.length, 20); i++) {
+                const row = data[i];
+                const pipCell = row[4];
+                const amountCell = row[9];
+                
+                if (pipCell && amountCell) {
+                    hasValidPayments = true;
+                    break;
+                }
+            }
+            
+            if (!hasValidPayments) {
+                errors.push('Не знайдено валідних платіжних записів у колонках E та J');
+            }
+
+            return errors;
+        }
+
+        function showValidationErrors(errors) {
+            const errorDiv = document.getElementById('validationErrors');
+            const errorList = document.getElementById('errorList');
+            
+            errorList.innerHTML = '';
+            errors.forEach(error => {
+                const li = document.createElement('li');
+                li.textContent = error;
+                errorList.appendChild(li);
+            });
+            
+            errorDiv.classList.add('show');
+        }
+
+        function hideValidationErrors() {
+            document.getElementById('validationErrors').classList.remove('show');
+        }
+
+        // Обробка завантаження файлів
+        document.getElementById('file1').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const label = document.getElementById('label1');
+                label.classList.remove('has-file', 'error');
+                label.innerHTML = `
+                    <div class="file-icon"><div class="spinner"></div></div>
+                    <div class="file-details">
+                        <div class="file-name">Обробка...</div>
+                        <div class="file-info">Перевірка структури файлу</div>
+                    </div>
+                `;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const data = new Uint8Array(e.target.result);
+                    try {
+                        file1Data = XLSX.read(data, {type: 'array'});
+                        
+                        const errors = validateFile1(file1Data);
+                        validationErrors = validationErrors.filter(e => !e.startsWith('Файл 1'));
+                        
+                        if (errors.length > 0) {
+                            validationErrors.push(...errors.map(e => `Файл 1: ${e}`));
+                            label.classList.add('error');
+                            label.innerHTML = `
+                                <div class="file-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </div>
+                                <div class="file-details">
+                                    <div class="file-name">${file.name}</div>
+                                    <div class="file-info">Валідація не пройдена</div>
+                                </div>
+                            `;
+                            showValidationErrors(validationErrors);
+                            file1Data = null;
+                        } else {
+                            label.classList.add('has-file');
+                            const sheet = file1Data.Sheets[file1Data.SheetNames[0]];
+                            const data = XLSX.utils.sheet_to_json(sheet, {header: 1});
+                            const rowCount = data.length - 1;
+                            label.innerHTML = `
+                                <div class="file-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <div class="file-details">
+                                    <div class="file-name">${file.name}</div>
+                                    <div class="file-info">${rowCount.toLocaleString('uk-UA')} боржників у реєстрі</div>
+                                </div>
+                            `;
+                            
+                            if (validationErrors.length === 0) {
+                                hideValidationErrors();
+                            }
+                        }
+                    } catch (error) {
+                        validationErrors.push(`Файл 1: Помилка читання - ${error.message}`);
+                        label.classList.add('error');
+                        label.innerHTML = `
+                            <div class="file-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </div>
+                            <div class="file-details">
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-info">Неможливо прочитати файл</div>
+                            </div>
+                        `;
+                        showValidationErrors(validationErrors);
+                        file1Data = null;
+                    }
+                    
+                    checkReadyToProcess();
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
+
+        document.getElementById('file2').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const label = document.getElementById('label2');
+                label.classList.remove('has-file', 'error');
+                label.innerHTML = `
+                    <div class="file-icon"><div class="spinner"></div></div>
+                    <div class="file-details">
+                        <div class="file-name">Обробка...</div>
+                        <div class="file-info">Перевірка структури файлу</div>
+                    </div>
+                `;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const data = new Uint8Array(e.target.result);
+                    try {
+                        file2Data = XLSX.read(data, {type: 'array'});
+                        
+                        const errors = validateFile2(file2Data);
+                        validationErrors = validationErrors.filter(e => !e.startsWith('Файл 2'));
+                        
+                        if (errors.length > 0) {
+                            validationErrors.push(...errors.map(e => `Файл 2: ${e}`));
+                            label.classList.add('error');
+                            label.innerHTML = `
+                                <div class="file-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </div>
+                                <div class="file-details">
+                                    <div class="file-name">${file.name}</div>
+                                    <div class="file-info">Валідація не пройдена</div>
+                                </div>
+                            `;
+                            showValidationErrors(validationErrors);
+                            file2Data = null;
+                        } else {
+                            label.classList.add('has-file');
+                            const sheet = file2Data.Sheets[file2Data.SheetNames[0]];
+                            const data = XLSX.utils.sheet_to_json(sheet, {header: 1});
+                            const paymentCount = data.length - 4;
+                            label.innerHTML = `
+                                <div class="file-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <div class="file-details">
+                                    <div class="file-name">${file.name}</div>
+                                    <div class="file-info">${paymentCount.toLocaleString('uk-UA')} платіжних транзакцій</div>
+                                </div>
+                            `;
+                            
+                            if (validationErrors.length === 0) {
+                                hideValidationErrors();
+                            }
+                        }
+                    } catch (error) {
+                        validationErrors.push(`Файл 2: Помилка читання - ${error.message}`);
+                        label.classList.add('error');
+                        label.innerHTML = `
+                            <div class="file-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </div>
+                            <div class="file-details">
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-info">Неможливо прочитати файл</div>
+                            </div>
+                        `;
+                        showValidationErrors(validationErrors);
+                        file2Data = null;
+                    }
+                    
+                    checkReadyToProcess();
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
+
+        document.getElementById('monthSelect').addEventListener('change', checkReadyToProcess);
+
+        function checkReadyToProcess() {
+            const monthSelected = document.getElementById('monthSelect').value !== '';
+            const btn = document.getElementById('processBtn');
+            btn.disabled = !(file1Data && file2Data && monthSelected && validationErrors.length === 0);
+        }
+
+        // Функції прогресу
+        function updateProgress(percent, status, details = '') {
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressStatus').textContent = status;
+            document.getElementById('progressDetails').textContent = details;
+        }
+
+        function showProgress() {
+            document.getElementById('progressContainer').classList.add('show');
+            document.getElementById('results').classList.remove('show');
+        }
+
+        function hideProgress() {
+            document.getElementById('progressContainer').classList.remove('show');
+        }
+
+        // Нормалізація ПІБ
+        function normalizeName(name) {
+            if (!name || typeof name !== 'string') return '';
+            name = name.split('\n')[0].trim();
+            name = name.replace(/\s+/g, ' ');
+            return name.toLowerCase().trim();
+        }
+
+        // Форматування числа
+        function formatNumber(num) {
+            if (num === null || num === undefined || num === '') return '';
+            const number = parseFloat(num);
+            if (isNaN(number)) return '';
+            return number.toLocaleString('uk-UA', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // Затримка
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Основна функція обробки
+        document.getElementById('processBtn').addEventListener('click', processFiles);
+
+        async function processFiles() {
+            showProgress();
+            document.getElementById('processBtn').disabled = true;
+            hideValidationErrors();
+
+            try {
+                updateProgress(10, 'Підготовка файлів...', 'Читання структур даних Excel');
+                await delay(500);
+
+                const monthColumn = document.getElementById('monthSelect').value;
+                
+                const sheet1Name = file1Data.SheetNames[0];
+                const sheet1 = file1Data.Sheets[sheet1Name];
+                const data1 = XLSX.utils.sheet_to_json(sheet1, {header: 1, defval: null});
+                
+                const sheet2Name = file2Data.SheetNames[0];
+                const sheet2 = file2Data.Sheets[sheet2Name];
+                const data2 = XLSX.utils.sheet_to_json(sheet2, {header: 1, defval: null});
+
+                updateProgress(20, 'Аналіз структури...', 'Пошук необхідних колонок');
+                await delay(400);
+                
+                const headers1 = data1[0];
+                const pipColumnIndex = headers1.indexOf('ПІП Позичальника');
+                
+                if (pipColumnIndex === -1) {
+                    throw new Error('Колонку "ПІП Позичальника" не знайдено');
+                }
+
+                updateProgress(30, 'Перевірка дублікатів...', 'Генерація назви колонки');
+                await delay(300);
+                
+                let newColumnName = monthColumn;
+                let counter = 2;
+                while (headers1.includes(newColumnName)) {
+                    newColumnName = `${monthColumn} (${counter})`;
+                    counter++;
+                }
+                
+                const newColumnIndex = pipColumnIndex + 1;
+                headers1.splice(newColumnIndex, 0, newColumnName);
+
+                updateProgress(40, 'Збір платежів...', 'Обробка даних бухгалтерії');
+                await delay(500);
+                
+                const payments = {};
+                const notFoundPeople = [];
+                
+                for (let i = 4; i < data2.length; i++) {
+                    const row = data2[i];
+                    const pipCell = row[4];
+                    const amountCell = row[9];
+                    
+                    if (pipCell && amountCell) {
+                        const normalizedPip = normalizeName(pipCell);
+                        if (normalizedPip) {
+                            const amount = parseFloat(amountCell);
+                            if (!isNaN(amount)) {
+                                payments[normalizedPip] = (payments[normalizedPip] || 0) + amount;
+                            }
+                        }
+                    }
+                }
+                
+                const paymentCount = Object.keys(payments).length;
+                updateProgress(50, `Знайдено ${paymentCount} платежів`, 'Створення індексу боржників');
+                await delay(400);
+
+                const debtorsMap = {};
+                for (let i = 1; i < data1.length; i++) {
+                    const pip = data1[i][pipColumnIndex];
+                    if (pip) {
+                        const normalizedPip = normalizeName(pip);
+                        debtorsMap[normalizedPip] = i;
+                    }
+                }
+
+                updateProgress(60, 'Підготовка колонки...', 'Вставка нової колонки');
+                await delay(300);
+                
+                for (let i = 1; i < data1.length; i++) {
+                    data1[i].splice(newColumnIndex, 0, null);
+                }
+
+                updateProgress(70, 'Обробка платежів...', 'Зіставлення платежів з боржниками');
+                await delay(600);
+                
+                let matchedCount = 0;
+                let totalAmount = 0;
+                let processedCount = 0;
+                
+                for (const [normalizedPip, amount] of Object.entries(payments)) {
+                    processedCount++;
+                    
+                    if (processedCount % 5 === 0) {
+                        const progress = 70 + (processedCount / paymentCount) * 20;
+                        updateProgress(progress, 'Обробка платежів...', `${processedCount} з ${paymentCount}`);
+                        await delay(50);
+                    }
+                    
+                    const rowIndex = debtorsMap[normalizedPip];
+                    
+                    if (rowIndex !== undefined) {
+                        data1[rowIndex][newColumnIndex] = amount;
+                        matchedCount++;
+                        totalAmount += amount;
+                    } else {
+                        for (let i = 4; i < data2.length; i++) {
+                            const pipCell = data2[i][4];
+                            if (pipCell && normalizeName(pipCell) === normalizedPip) {
+                                notFoundPeople.push({
+                                    name: pipCell.split('\n')[0].trim(),
+                                    amount: amount
+                                });
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                updateProgress(90, 'Створення файлу...', 'Генерація фінального документу');
+                await delay(500);
+                
+                const newWorkbook = XLSX.utils.book_new();
+                const newSheet = XLSX.utils.aoa_to_sheet(data1);
+                XLSX.utils.book_append_sheet(newWorkbook, newSheet, sheet1Name);
+                
+                processedWorkbook = newWorkbook;
+
+                updateProgress(100, 'Завершено', 'Обробку файлу успішно виконано');
+                await delay(500);
+                
+                hideProgress();
+                displayResults(matchedCount, totalAmount, notFoundPeople, newColumnName, paymentCount);
+                
+            } catch (error) {
+                hideProgress();
+                alert('Помилка обробки: ' + error.message);
+                console.error(error);
+            } finally {
+                document.getElementById('processBtn').disabled = false;
+            }
+        }
+
+        function displayResults(matchedCount, totalAmount, notFoundPeople, columnName, totalPayments) {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = `
+                <div class="result-item success">
+                    <div class="result-title">Обробку завершено</div>
+                    <div class="result-details">
+                        Створено колонку: <strong>${columnName}</strong><br>
+                        Всього платежів у звіті: <strong>${totalPayments}</strong><br>
+                        Знайдено збігів: <strong>${matchedCount}</strong><br>
+                        Загальна сума знайдених платежів: <strong>${formatNumber(totalAmount)} грн</strong>
+                    </div>
+                </div>
+            `;
+            
+            if (notFoundPeople.length > 0) {
+                const notFoundAmount = notFoundPeople.reduce((sum, p) => sum + p.amount, 0);
+                html += `
+                    <div class="result-item warning">
+                        <div class="result-title">Незіставлені записи</div>
+                        <div class="result-details">
+                            Кількість: <strong>${notFoundPeople.length}</strong><br>
+                            Загальна сума: <strong>${formatNumber(notFoundAmount)} грн</strong>
+                            <div class="not-found-list">
+                                ${notFoundPeople.map(p => 
+                                    `<div><strong>${p.name}</strong><span>${formatNumber(p.amount)} грн</span></div>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (matchedCount === 0) {
+                html += `
+                    <div class="result-item error">
+                        <div class="result-title">Збігів не знайдено</div>
+                        <div class="result-details">
+                            Не знайдено жодного збігу між файлами. Можливі причини:<br>
+                            • Різний формат імен між файлами<br>
+                            • Звіт не містить існуючих боржників<br>
+                            • Помилка формату файлу
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += `
+                <button class="download-btn" onclick="downloadFile()">
+                    <span>Завантажити оброблений файл</span>
+                </button>
+            `;
+            
+            resultsDiv.innerHTML = html;
+            resultsDiv.classList.add('show');
+        }
+
+        function downloadFile() {
+            if (processedWorkbook) {
+                const monthName = document.getElementById('monthSelect').value
+                    .replace('Оплата ', '')
+                    .replace(/ /g, '_');
+                const fileName = `Реєстр_боржників_${monthName}.xlsx`;
+                
+                XLSX.writeFile(processedWorkbook, fileName);
+            }
+        }
+    </script>
+</body>
+</html>
