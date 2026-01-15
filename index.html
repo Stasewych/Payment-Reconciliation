@@ -910,7 +910,8 @@
             color: var(--gray-700);
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            gap: 16px;
         }
 
         .not-found-list div:last-child {
@@ -920,6 +921,11 @@
         .not-found-list strong {
             font-weight: 500;
             color: var(--black);
+        }
+        
+        .not-found-list div > span:last-child {
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .download-btn {
@@ -1104,7 +1110,7 @@
                     Файл реєстру боржників
                 </div>
                 <div class="file-input-wrapper">
-                    <input type="file" id="file1Payments" accept=".xlsx" />
+                    <input type="file" id="file1Payments" accept=".xlsx,.xls" />
                     <label for="file1Payments" class="file-input-label" id="label1Payments">
                         <div class="file-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1113,7 +1119,7 @@
                         </div>
                         <div class="file-details">
                             <div class="file-name">Оберіть основний реєстр</div>
-                            <div class="file-info">Excel файл з інформацією про боржників</div>
+                            <div class="file-info">Excel файл з інформацією про боржників (.xlsx або .xls)</div>
                         </div>
                     </label>
                 </div>
@@ -1125,7 +1131,7 @@
                     Звіт бухгалтерії
                 </div>
                 <div class="file-input-wrapper">
-                    <input type="file" id="file2Payments" accept=".xlsx" />
+                    <input type="file" id="file2Payments" accept=".xlsx,.xls" />
                     <label for="file2Payments" class="file-input-label" id="label2Payments">
                         <div class="file-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1134,7 +1140,7 @@
                         </div>
                         <div class="file-details">
                             <div class="file-name">Оберіть звіт про платежі</div>
-                            <div class="file-info">Місячний звіт про транзакції від бухгалтерії</div>
+                            <div class="file-info">Місячний звіт про транзакції від бухгалтерії (.xlsx або .xls)</div>
                         </div>
                     </label>
                 </div>
@@ -1188,7 +1194,7 @@
                         </div>
                         <div class="file-details">
                             <div class="file-name">Завантажте файл усіх рахунків</div>
-                            <div class="file-info">Excel файл з повним переліком IBAN номерів</div>
+                            <div class="file-info">Excel файл з повним переліком IBAN номерів (.xlsx або .xls)</div>
                         </div>
                     </label>
                 </div>
@@ -1212,7 +1218,7 @@
                         </div>
                         <div class="file-details">
                             <div class="file-name">Завантажте файл зарплатних рахунків</div>
-                            <div class="file-info">IBAN які будуть виключені з результату</div>
+                            <div class="file-info">IBAN які будуть виключені з результату (.xlsx або .xls)</div>
                         </div>
                     </label>
                 </div>
@@ -1410,6 +1416,34 @@
         // ===========================================
         // PAYMENTS TAB LOGIC
         // ===========================================
+        
+        // Функція конвертації .xls в .xlsx для роботи з ExcelJS
+        async function convertXlsToXlsx(arrayBuffer, fileName) {
+            // Перевіряємо чи це .xls файл
+            const isXls = fileName.toLowerCase().endsWith('.xls');
+            
+            if (!isXls) {
+                // Якщо це вже .xlsx - повертаємо як є
+                return arrayBuffer;
+            }
+            
+            try {
+                // Використовуємо SheetJS для читання .xls
+                const data = new Uint8Array(arrayBuffer);
+                const workbook = XLSX.read(data, { type: 'array' });
+                
+                // Конвертуємо в .xlsx формат
+                const xlsxBuffer = XLSX.write(workbook, { 
+                    bookType: 'xlsx', 
+                    type: 'array'
+                });
+                
+                return xlsxBuffer;
+            } catch (error) {
+                throw new Error(`Помилка конвертації .xls файлу: ${error.message}`);
+            }
+        }
+        
         // Initialize months for payments
         function generateMonthOptions(showAll = false) {
             const months = [
@@ -1620,8 +1654,11 @@
                 
                 const reader = new FileReader();
                 reader.onload = async function(e) {
-                    const arrayBuffer = e.target.result;
+                    let arrayBuffer = e.target.result;
                     try {
+                        // Конвертуємо .xls в .xlsx якщо потрібно
+                        arrayBuffer = await convertXlsToXlsx(arrayBuffer, file.name);
+                        
                         const errors = await validateFile1Payments(arrayBuffer);
                         validationErrorsPayments = validationErrorsPayments.filter(e => !e.startsWith('Файл 1'));
                         
@@ -1714,8 +1751,11 @@
                 
                 const reader = new FileReader();
                 reader.onload = async function(e) {
-                    const arrayBuffer = e.target.result;
+                    let arrayBuffer = e.target.result;
                     try {
+                        // Конвертуємо .xls в .xlsx якщо потрібно
+                        arrayBuffer = await convertXlsToXlsx(arrayBuffer, file.name);
+                        
                         const errors = await validateFile2Payments(arrayBuffer);
                         validationErrorsPayments = validationErrorsPayments.filter(e => !e.startsWith('Файл 2'));
                         
@@ -1800,6 +1840,36 @@
             return name.toLowerCase().trim();
         }
 
+        function normalizeContract(contract) {
+            if (!contract || typeof contract !== 'string') return '';
+            // Видаляємо зайві пробіли та переводимо в lower case
+            return contract.trim().toLowerCase();
+        }
+
+        function extractContractNumber(text) {
+            // Витягуємо номер договору до слова "від"
+            // Приклад: "CL-214019 від 16.08.2019" -> "CL-214019"
+            if (!text || typeof text !== 'string') return '';
+            
+            const lines = text.split('\n');
+            if (lines.length < 2) return '';
+            
+            const contractLine = lines[1].trim();
+            const parts = contractLine.split(' від ');
+            if (parts.length > 0) {
+                return parts[0].trim();
+            }
+            
+            return contractLine;
+        }
+
+        function createIdentifier(name, contract) {
+            // Створюємо унікальний ключ: normalize(ПІБ) + "|" + normalize(договір)
+            const normName = normalizeName(name);
+            const normContract = normalizeContract(contract);
+            return normName + '|' + normContract;
+        }
+
         function formatNumber(num) {
             if (num === null || num === undefined || num === '') return '';
             const number = parseFloat(num);
@@ -1879,21 +1949,43 @@
                 updateProgress(40, 3);
                 await delay(500);
                 
+                // Збираємо платежі з Файлу 2
+                // Ключ: ПІБ + Номер договору
                 const sheet2 = workbook2.worksheets[0];
-                const payments = {};
-                const notFoundPeople = [];
+                const payments = {}; // {identifier: сума}
+                const paymentDetails = {}; // Зберігаємо деталі для звіту
                 
                 for (let i = 5; i <= sheet2.rowCount; i++) {
                     const row = sheet2.getRow(i);
-                    const pipCell = row.getCell(5);
-                    const amountCell = row.getCell(10);
+                    const pipCell = row.getCell(5); // Column E - ПІБ + договір
+                    const amountCell = row.getCell(10); // Column J - Сума
                     
                     if (pipCell.value && amountCell.value) {
-                        const normalizedPip = normalizeName(pipCell.value);
-                        if (normalizedPip) {
-                            const amount = parseFloat(amountCell.value);
-                            if (!isNaN(amount)) {
-                                payments[normalizedPip] = (payments[normalizedPip] || 0) + amount;
+                        const cellText = pipCell.value.toString();
+                        const lines = cellText.split('\n');
+                        
+                        if (lines.length >= 2) {
+                            const pipName = lines[0].trim();
+                            const contractNumber = extractContractNumber(cellText);
+                            
+                            if (pipName && contractNumber) {
+                                const identifier = createIdentifier(pipName, contractNumber);
+                                const amount = parseFloat(amountCell.value);
+                                
+                                if (!isNaN(amount)) {
+                                    // Якщо вже є платіж з таким ключем - додаємо до суми
+                                    payments[identifier] = (payments[identifier] || 0) + amount;
+                                    
+                                    // Зберігаємо деталі для звіту
+                                    if (!paymentDetails[identifier]) {
+                                        paymentDetails[identifier] = {
+                                            name: pipName,
+                                            contract: contractNumber,
+                                            amount: 0
+                                        };
+                                    }
+                                    paymentDetails[identifier].amount += amount;
+                                }
                             }
                         }
                     }
@@ -1903,13 +1995,27 @@
                 updateProgress(50, 4);
                 await delay(400);
 
+                // Створюємо мапу боржників: {identifier: [rowIndex1, rowIndex2, ...]}
+                // Один ідентифікатор може мати кілька рядків (дублікати)
                 const debtorsMap = {};
+                const contractColumnIndex = headers.indexOf('Номер кредитного договору') + 1;
+                
+                if (contractColumnIndex === 0) {
+                    throw new Error('Колонку "Номер кредитного договору" не знайдено');
+                }
+                
                 for (let i = 2; i <= zagalniySheet.rowCount; i++) {
                     const row = zagalniySheet.getRow(i);
                     const pipCell = row.getCell(pipColumnIndex);
-                    if (pipCell.value) {
-                        const normalizedPip = normalizeName(pipCell.value);
-                        debtorsMap[normalizedPip] = i;
+                    const contractCell = row.getCell(contractColumnIndex);
+                    
+                    if (pipCell.value && contractCell.value) {
+                        const identifier = createIdentifier(pipCell.value, contractCell.value);
+                        
+                        if (!debtorsMap[identifier]) {
+                            debtorsMap[identifier] = [];
+                        }
+                        debtorsMap[identifier].push(i);
                     }
                 }
 
@@ -1932,8 +2038,9 @@
                 let matchedCount = 0;
                 let totalAmount = 0;
                 let processedCount = 0;
+                const notFoundPeople = []; // Для тих, кого не знайдено
                 
-                for (const [normalizedPip, amount] of Object.entries(payments)) {
+                for (const [identifier, amount] of Object.entries(payments)) {
                     processedCount++;
                     
                     if (processedCount % 5 === 0) {
@@ -1942,34 +2049,34 @@
                         await delay(50);
                     }
                     
-                    const rowIndex = debtorsMap[normalizedPip];
+                    const rowIndexes = debtorsMap[identifier];
                     
-                    if (rowIndex !== undefined) {
-                        const row = zagalniySheet.getRow(rowIndex);
-                        const cell = row.getCell(newColumnIndex);
-                        cell.value = amount;
-                        
-                        const referenceCell = row.getCell(pipColumnIndex);
-                        if (referenceCell.style) {
-                            cell.style = Object.assign({}, referenceCell.style);
-                        }
-                        
-                        cell.numFmt = '#,##0.00';
-                        
-                        matchedCount++;
-                        totalAmount += amount;
-                    } else {
-                        for (let i = 5; i <= sheet2.rowCount; i++) {
-                            const pipCell = sheet2.getRow(i).getCell(5);
-                            if (pipCell.value && normalizeName(pipCell.value) === normalizedPip) {
-                                let name = pipCell.value.toString();
-                                name = name.split('\n')[0].trim();
-                                notFoundPeople.push({
-                                    name: name,
-                                    amount: amount
-                                });
-                                break;
+                    if (rowIndexes && rowIndexes.length > 0) {
+                        // Вставляємо суму в усі знайдені рядки (якщо є дублікати)
+                        for (const rowIndex of rowIndexes) {
+                            const row = zagalniySheet.getRow(rowIndex);
+                            const cell = row.getCell(newColumnIndex);
+                            cell.value = amount;
+                            
+                            const referenceCell = row.getCell(pipColumnIndex);
+                            if (referenceCell.style) {
+                                cell.style = Object.assign({}, referenceCell.style);
                             }
+                            
+                            cell.numFmt = '#,##0.00';
+                            
+                            matchedCount++;
+                            totalAmount += amount;
+                        }
+                    } else {
+                        // Не знайдено - додаємо до списку незіставлених
+                        const details = paymentDetails[identifier];
+                        if (details) {
+                            notFoundPeople.push({
+                                name: details.name,
+                                contract: details.contract,
+                                amount: details.amount
+                            });
                         }
                     }
                 }
@@ -2019,7 +2126,13 @@
                             Загальна сума: <strong>${formatNumber(notFoundAmount)} грн</strong>
                             <div class="not-found-list">
                                 ${notFoundPeople.map(p => 
-                                    `<div><strong>${p.name}</strong><span>${formatNumber(p.amount)} грн</span></div>`
+                                    `<div>
+                                        <div>
+                                            <strong>${p.name}</strong><br>
+                                            <span style="font-size: 12px; color: var(--gray-500);">Договір: ${p.contract}</span>
+                                        </div>
+                                        <span>${formatNumber(p.amount)} грн</span>
+                                    </div>`
                                 ).join('')}
                             </div>
                         </div>
