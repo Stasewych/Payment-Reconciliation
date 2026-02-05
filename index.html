@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Just Solution | Legal Technology</title>
     <link rel="icon" type="image/png" href="https://i.ibb.co/R49xRb5r/2026-01-12-19-28-01.png">
     <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx/xlsx.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -48,8 +51,8 @@
             max-width: 440px;
             width: 100%;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03),
-                        0 8px 24px rgba(0, 0, 0, 0.04),
-                        0 24px 48px rgba(0, 0, 0, 0.05);
+                0 8px 24px rgba(0, 0, 0, 0.04),
+                0 24px 48px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--gray-200);
         }
 
@@ -144,6 +147,7 @@
                 opacity: 0;
                 transform: translateY(-8px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -201,8 +205,8 @@
             max-width: 900px;
             width: 100%;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03),
-                        0 8px 24px rgba(0, 0, 0, 0.04),
-                        0 24px 48px rgba(0, 0, 0, 0.05);
+                0 8px 24px rgba(0, 0, 0, 0.04),
+                0 24px 48px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--gray-200);
             display: none;
         }
@@ -213,8 +217,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         /* HEADER WITH TABS */
@@ -498,7 +507,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* SELECT */
@@ -746,16 +757,21 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.3), 
-                transparent);
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.3),
+                    transparent);
             animation: shimmer 1.5s infinite;
         }
 
         @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         .progress-steps {
@@ -922,8 +938,8 @@
             font-weight: 500;
             color: var(--black);
         }
-        
-        .not-found-list div > span:last-child {
+
+        .not-found-list div>span:last-child {
             white-space: nowrap;
             flex-shrink: 0;
         }
@@ -1053,6 +1069,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- ЕКРАН ЛОГІНУ -->
     <div class="login-container" id="loginContainer">
@@ -1114,7 +1131,8 @@
                     <label for="file1Payments" class="file-input-label" id="label1Payments">
                         <div class="file-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                         </div>
                         <div class="file-details">
@@ -1135,7 +1153,8 @@
                     <label for="file2Payments" class="file-input-label" id="label2Payments">
                         <div class="file-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                         </div>
                         <div class="file-details">
@@ -1156,9 +1175,82 @@
                 </select>
                 <div style="margin-top: 16px; display: flex; align-items: center; gap: 8px;">
                     <input type="checkbox" id="showOlderMonthsPayments" style="width: auto; cursor: pointer;">
-                    <label for="showOlderMonthsPayments" style="font-size: 13px; color: var(--gray-600); cursor: pointer; user-select: none;">
+                    <label for="showOlderMonthsPayments"
+                        style="font-size: 13px; color: var(--gray-600); cursor: pointer; user-select: none;">
                         Показати місяці старіше одного місяця
                     </label>
+                </div>
+            </div>
+
+            <!-- Encoding Selector -->
+            <div class="section">
+                <div class="section-label">
+                    Кодування (Якщо є краказябри)
+                </div>
+                <select id="encodingSelect">
+                    <option value="1251" selected>Windows-1251 (Кирилиця)</option>
+                    <option value="866">DOS CP866 (Стара кирилиця)</option>
+                    <option value="65001">UTF-8 (Сучасне)</option>
+                </select>
+                <div style="margin-top: 8px; font-size: 12px; color: var(--gray-500);">
+                    Змініть це налаштування, якщо текст у файлі відображається некоректно. Перезавантажте файл після
+                    зміни.
+                </div>
+            </div>
+
+            <!-- Column Mapping Section -->
+            <div id="columnMappingSection" class="section hidden">
+                <div class="section-label">
+                    <span class="section-number">4</span>
+                    Налаштування колонок
+                </div>
+
+                <div style="background: var(--gray-50); padding: 24px; border: 1px solid var(--gray-200);">
+                    <!-- File 1 Mapping -->
+                    <div style="margin-bottom: 24px;">
+                        <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--black);">Файл 1:
+                            Реєстр боржників</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Колонка з ПІБ</label>
+                                <select id="colMapFile1Name">
+                                    <option value="">Завантажте файл...</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Номер договору</label>
+                                <select id="colMapFile1Contract">
+                                    <option value="">Завантажте файл...</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Колонка з ІПН</label>
+                                <select id="colMapFile1Ipn">
+                                    <option value="">Завантажте файл...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- File 2 Mapping -->
+                    <div>
+                        <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--black);">Файл 2:
+                            Звіт бухгалтерії</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Колонка з ПІБ платника</label>
+                                <select id="colMapFile2Name">
+                                    <option value="">Завантажте файл...</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Колонка з сумою</label>
+                                <select id="colMapFile2Amount">
+                                    <option value="">Завантажте файл...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1189,7 +1281,8 @@
                     <label for="file1Iban" class="file-input-label" id="label1Iban">
                         <div class="file-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                         </div>
                         <div class="file-details">
@@ -1213,7 +1306,8 @@
                     <label for="file2Iban" class="file-input-label" id="label2Iban">
                         <div class="file-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                         </div>
                         <div class="file-details">
@@ -1299,13 +1393,13 @@
             password: 'Auxilium2026!'
         };
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('loginError');
-            
+
             if (username === CREDENTIALS.username && password === CREDENTIALS.password) {
                 errorMessage.classList.remove('show');
                 document.getElementById('loginContainer').style.display = 'none';
@@ -1315,7 +1409,7 @@
                 errorMessage.classList.add('show');
                 document.getElementById('username').classList.add('error');
                 document.getElementById('password').classList.add('error');
-                
+
                 setTimeout(() => {
                     document.getElementById('username').classList.remove('error');
                     document.getElementById('password').classList.remove('error');
@@ -1330,12 +1424,12 @@
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
             document.getElementById('loginError').classList.remove('show');
-            
+
             // Reset tabs
             switchTab('payments');
         }
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             if (sessionStorage.getItem('authenticated') === 'true') {
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('mainContainer').classList.add('show');
@@ -1348,12 +1442,12 @@
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
-            
+
             // Remove active class from all tab buttons
             document.querySelectorAll('.tab').forEach(btn => {
                 btn.classList.remove('active');
             });
-            
+
             // Show selected tab
             if (tabName === 'payments') {
                 document.getElementById('paymentsTab').classList.add('active');
@@ -1368,7 +1462,7 @@
         function showProgress(title, subtitle, steps) {
             document.getElementById('progressTitle').textContent = title;
             document.getElementById('progressSubtitle').textContent = subtitle;
-            
+
             const stepsContainer = document.getElementById('progressSteps');
             stepsContainer.innerHTML = steps.map((step, index) => `
                 <div class="progress-step" id="progressStep${index + 1}">
@@ -1379,7 +1473,7 @@
                     </div>
                 </div>
             `).join('');
-            
+
             document.getElementById('progressOverlay').classList.add('show');
             updateProgress(0, 1);
         }
@@ -1393,7 +1487,7 @@
         function updateProgress(percentage, currentStep) {
             document.getElementById('progressPercentage').textContent = Math.round(percentage) + '%';
             document.getElementById('progressBarFill').style.width = percentage + '%';
-            
+
             const steps = document.querySelectorAll('.progress-step');
             steps.forEach((step, index) => {
                 const stepNum = index + 1;
@@ -1416,34 +1510,38 @@
         // ===========================================
         // PAYMENTS TAB LOGIC
         // ===========================================
-        
+
         // Функція конвертації .xls в .xlsx для роботи з ExcelJS
         async function convertXlsToXlsx(arrayBuffer, fileName) {
             // Перевіряємо чи це .xls файл
             const isXls = fileName.toLowerCase().endsWith('.xls');
-            
+
             if (!isXls) {
                 // Якщо це вже .xlsx - повертаємо як є
                 return arrayBuffer;
             }
-            
+
             try {
+                // Get selected encoding
+                const encoding = parseInt(document.getElementById('encodingSelect').value) || 1251;
+
                 // Використовуємо SheetJS для читання .xls
                 const data = new Uint8Array(arrayBuffer);
-                const workbook = XLSX.read(data, { type: 'array' });
-                
+                // Use selected encoding
+                const workbook = XLSX.read(data, { type: 'array', codepage: encoding });
+
                 // Конвертуємо в .xlsx формат
-                const xlsxBuffer = XLSX.write(workbook, { 
-                    bookType: 'xlsx', 
+                const xlsxBuffer = XLSX.write(workbook, {
+                    bookType: 'xlsx',
                     type: 'array'
                 });
-                
+
                 return xlsxBuffer;
             } catch (error) {
                 throw new Error(`Помилка конвертації .xls файлу: ${error.message}`);
             }
         }
-        
+
         // Initialize months for payments
         function generateMonthOptions(showAll = false) {
             const months = [
@@ -1452,37 +1550,37 @@
             ];
             const select = document.getElementById('monthSelectPayments');
             const currentValue = select.value;
-            
+
             select.innerHTML = '<option value="">Оберіть місяць</option>';
-            
+
             const now = new Date();
             const currentYear = now.getFullYear();
             const currentMonth = now.getMonth();
-            
+
             const oneMonthAgo = new Date(currentYear, currentMonth - 1, 1);
-            
+
             for (let year = currentYear - 2; year <= currentYear + 1; year++) {
                 months.forEach((month, index) => {
                     const monthDate = new Date(year, index, 1);
-                    
+
                     if (!showAll) {
                         if (monthDate < oneMonthAgo) {
                             return;
                         }
                     }
-                    
+
                     const option = document.createElement('option');
                     option.value = `Оплата ${month} ${year}`;
                     option.textContent = `${month} ${year}`;
-                    
+
                     if (year === currentYear && index === currentMonth) {
                         option.textContent += ' (поточний)';
                     }
-                    
+
                     select.appendChild(option);
                 });
             }
-            
+
             if (currentValue) {
                 const options = Array.from(select.options);
                 const matchingOption = options.find(opt => opt.value === currentValue);
@@ -1493,8 +1591,8 @@
         }
 
         generateMonthOptions(false);
-        
-        document.getElementById('showOlderMonthsPayments').addEventListener('change', function(e) {
+
+        document.getElementById('showOlderMonthsPayments').addEventListener('change', function (e) {
             generateMonthOptions(e.target.checked);
         });
 
@@ -1504,23 +1602,119 @@
         let processedWorkbookPayments = null;
         let validationErrorsPayments = [];
 
+        // Helper: Extract columns from worksheet
+        function extractColumns(worksheet, headerRowIndex = 1) {
+            const columns = [];
+            const row = worksheet.getRow(headerRowIndex);
+
+            // If row is empty, generate generic columns based on worksheet.columnCount
+            if (row.cellCount === 0) {
+                const colCount = Math.max(worksheet.columnCount, 26);
+                for (let i = 1; i <= colCount; i++) {
+                    const letter = worksheet.getColumn(i).letter || getColumnLetter(i);
+                    columns.push({
+                        index: i,
+                        letter: letter,
+                        value: `Column ${letter}`
+                    });
+                }
+            } else {
+                row.eachCell({ includeEmpty: false }, (cell, colNumber) => {
+                    columns.push({
+                        index: colNumber,
+                        letter: worksheet.getColumn(colNumber).letter,
+                        value: cell.value ? cell.value.toString() : `(Empty)`
+                    });
+                });
+            }
+            return columns;
+        }
+
+        // Helper: Extract columns with preview (for File 2)
+        function extractColumnsWithPreview(worksheet, previewRowIndex = 10) {
+            const columns = [];
+            // Scan first 20 columns max (or more if needed)
+            const maxCols = Math.max(worksheet.columnCount, 30);
+            const previewRow = worksheet.getRow(previewRowIndex);
+
+            for (let i = 1; i <= maxCols; i++) {
+                const letter = worksheet.getColumn(i).letter || getColumnLetter(i);
+
+                // Try to find a header-like value in first 10 rows? 
+                // No, just show preview.
+                const previewVal = previewRow.getCell(i).value;
+                const previewStr = previewVal ? String(previewVal).substring(0, 15) : '';
+
+                columns.push({
+                    index: i,
+                    letter: letter,
+                    value: `Колонка ${letter} ${previewStr ? `(${previewStr}...)` : ''}`
+                });
+            }
+            return columns;
+        }
+
+        // Helper: Get column letter from index
+        function getColumnLetter(colIndex) {
+            let temp, letter = '';
+            while (colIndex > 0) {
+                temp = (colIndex - 1) % 26;
+                letter = String.fromCharCode(temp + 65) + letter;
+                colIndex = (colIndex - temp - 1) / 2;
+            }
+            return letter;
+        }
+
+        // Helper: Populate Select Key
+        function populateColumnSelect(selectId, columns, keywords = []) {
+            const select = document.getElementById(selectId);
+            const currentVal = select.value;
+            select.innerHTML = '<option value="">Оберіть колонку...</option>';
+
+            let autoMatch = null;
+
+            columns.forEach(col => {
+                const option = document.createElement('option');
+                option.value = col.index;
+                option.textContent = `${col.letter}: ${col.value}`;
+                select.appendChild(option);
+
+                if (!autoMatch && keywords.length > 0) {
+                    const text = col.value.toLowerCase();
+                    if (keywords.some(k => text.includes(k.toLowerCase()))) {
+                        autoMatch = col.index;
+                    }
+                }
+            });
+
+            if (autoMatch) {
+                select.value = autoMatch;
+            }
+        }
+
+        function toggleColumnMapping(show) {
+            const div = document.getElementById('columnMappingSection');
+            if (show) div.classList.remove('hidden');
+            else div.classList.add('hidden');
+        }
+
         // Payment validation functions
         async function validateFile1Payments(arrayBuffer) {
             const errors = [];
-            
+
             try {
                 const workbook = new ExcelJS.Workbook();
                 await workbook.xlsx.load(arrayBuffer);
-                
+
                 if (!workbook.worksheets || workbook.worksheets.length === 0) {
                     errors.push('Файл не містить жодного аркуша');
                     return errors;
                 }
 
-                const zagalniySheet = workbook.worksheets.find(sheet => 
+                const zagalniySheet = workbook.worksheets.find(sheet =>
                     sheet.name.toLowerCase().trim() === 'загальний'
                 );
-                
+
                 if (!zagalniySheet) {
                     const sheetNames = workbook.worksheets.map(s => s.name).join(', ');
                     errors.push(`Відсутній обов'язковий аркуш "Загальний". Знайдені аркуші: ${sheetNames}`);
@@ -1532,42 +1726,22 @@
                     return errors;
                 }
 
-                const headerRow = zagalniySheet.getRow(1);
-                const headers = [];
-                headerRow.eachCell((cell) => {
-                    headers.push(cell.value);
-                });
-                
-                if (!headers.includes('ПІП Позичальника')) {
-                    errors.push('Відсутня обов\'язкова колонка: "ПІП Позичальника"');
-                }
-                
-                if (!headers.includes('ІПН Позичальника')) {
-                    errors.push('Відсутня обов\'язкова колонка: "ІПН Позичальника"');
-                }
+                // EXTRACT COLUMNS & POPULATE UI
+                const columns = extractColumns(zagalniySheet, 1);
+                populateColumnSelect('colMapFile1Name', columns, ['ПІП', 'ПІБ', 'Позичальник', 'Name', 'Прізвище']);
+                populateColumnSelect('colMapFile1Contract', columns, ['Договір', 'Contract', 'Credit', 'Agreement', 'Кредитний']);
+                populateColumnSelect('colMapFile1Ipn', columns, ['ІПН', 'IPN', 'Code', 'Код', 'РНОКПП']);
+
+                // Show mapping section
+                toggleColumnMapping(true);
 
                 if (zagalniySheet.rowCount < 2) {
                     errors.push('Відсутні рядки з даними (лише заголовки)');
-                    return errors;
-                }
-
-                const pipColumnIndex = headers.indexOf('ПІП Позичальника') + 1;
-                let hasValidData = false;
-                
-                for (let i = 2; i <= Math.min(zagalniySheet.rowCount, 11); i++) {
-                    const cell = zagalniySheet.getRow(i).getCell(pipColumnIndex);
-                    if (cell.value && cell.value.toString().trim()) {
-                        hasValidData = true;
-                        break;
-                    }
-                }
-                
-                if (!hasValidData) {
-                    errors.push('Не знайдено валідних ПІБ у перших 10 рядках');
                 }
 
                 return errors;
             } catch (error) {
+                console.error(error);
                 errors.push(`Помилка читання файлу: ${error.message}`);
                 return errors;
             }
@@ -1575,46 +1749,39 @@
 
         async function validateFile2Payments(arrayBuffer) {
             const errors = [];
-            
+
             try {
                 const workbook = new ExcelJS.Workbook();
                 await workbook.xlsx.load(arrayBuffer);
-                
+
                 if (!workbook.worksheets || workbook.worksheets.length === 0) {
                     errors.push('Файл не містить жодного аркуша');
                     return errors;
                 }
 
                 const sheet = workbook.worksheets[0];
-                
+
                 if (sheet.rowCount === 0) {
                     errors.push('Файл пустий');
                     return errors;
                 }
 
-                if (sheet.rowCount < 5) {
-                    errors.push('Недостатньо даних (мінімум 5 рядків)');
-                    return errors;
-                }
+                // EXTRACT COLUMNS & POPULATE UI
+                // Try to find a header row or just use preview
+                // We'll use row 10 (or 1 if < 10) for preview
+                const previewRow = Math.min(sheet.rowCount, 10);
+                const columns = extractColumnsWithPreview(sheet, previewRow);
 
-                let hasValidPayments = false;
-                for (let i = 5; i <= Math.min(sheet.rowCount, 20); i++) {
-                    const row = sheet.getRow(i);
-                    const pipCell = row.getCell(5);
-                    const amountCell = row.getCell(10);
-                    
-                    if (pipCell.value && amountCell.value) {
-                        hasValidPayments = true;
-                        break;
-                    }
-                }
-                
-                if (!hasValidPayments) {
-                    errors.push('Не знайдено валідних платіжних записів у колонках E та J');
+                populateColumnSelect('colMapFile2Name', columns, ['ПІП', 'ПІБ', 'Платник', 'Name', 'Призначення']);
+                populateColumnSelect('colMapFile2Amount', columns, ['Сума', 'Amount', 'Credit', 'Кредит']);
+
+                if (sheet.rowCount < 2) {
+                    errors.push('Недостатньо даних (менше 2 рядків)');
                 }
 
                 return errors;
             } catch (error) {
+                console.error(error);
                 errors.push(`Помилка читання файлу: ${error.message}`);
                 return errors;
             }
@@ -1623,14 +1790,14 @@
         function showValidationErrorsPayments(errors) {
             const errorDiv = document.getElementById('validationErrorsPayments');
             const errorList = document.getElementById('errorListPayments');
-            
+
             errorList.innerHTML = '';
             errors.forEach(error => {
                 const li = document.createElement('li');
                 li.textContent = error;
                 errorList.appendChild(li);
             });
-            
+
             errorDiv.classList.add('show');
         }
 
@@ -1639,7 +1806,7 @@
         }
 
         // File upload handlers for payments
-        document.getElementById('file1Payments').addEventListener('change', async function(e) {
+        document.getElementById('file1Payments').addEventListener('change', async function (e) {
             const file = e.target.files[0];
             if (file) {
                 const label = document.getElementById('label1Payments');
@@ -1651,17 +1818,17 @@
                         <div class="file-info">Перевірка структури файлу</div>
                     </div>
                 `;
-                
+
                 const reader = new FileReader();
-                reader.onload = async function(e) {
+                reader.onload = async function (e) {
                     let arrayBuffer = e.target.result;
                     try {
                         // Конвертуємо .xls в .xlsx якщо потрібно
                         arrayBuffer = await convertXlsToXlsx(arrayBuffer, file.name);
-                        
+
                         const errors = await validateFile1Payments(arrayBuffer);
                         validationErrorsPayments = validationErrorsPayments.filter(e => !e.startsWith('Файл 1'));
-                        
+
                         if (errors.length > 0) {
                             validationErrorsPayments.push(...errors.map(e => `Файл 1: ${e}`));
                             label.classList.add('error');
@@ -1680,21 +1847,21 @@
                             file1DataPayments = null;
                         } else {
                             file1DataPayments = arrayBuffer;
-                            
+
                             const workbook = new ExcelJS.Workbook();
                             await workbook.xlsx.load(arrayBuffer);
-                            
-                            const zagalniySheet = workbook.worksheets.find(sheet => 
+
+                            const zagalniySheet = workbook.worksheets.find(sheet =>
                                 sheet.name.toLowerCase().trim() === 'загальний'
                             );
-                            
+
                             const rowCount = zagalniySheet.rowCount - 1;
-                            
+
                             let sheetsInfo = '';
                             if (workbook.worksheets.length > 1) {
                                 sheetsInfo = ` • ${workbook.worksheets.length} аркушів`;
                             }
-                            
+
                             label.classList.add('has-file');
                             label.innerHTML = `
                                 <div class="file-icon">
@@ -1707,7 +1874,7 @@
                                     <div class="file-info">${rowCount.toLocaleString('uk-UA')} боржників у реєстрі${sheetsInfo}</div>
                                 </div>
                             `;
-                            
+
                             if (validationErrorsPayments.length === 0) {
                                 hideValidationErrorsPayments();
                             }
@@ -1729,14 +1896,14 @@
                         showValidationErrorsPayments(validationErrorsPayments);
                         file1DataPayments = null;
                     }
-                    
+
                     checkReadyToProcessPayments();
                 };
                 reader.readAsArrayBuffer(file);
             }
         });
 
-        document.getElementById('file2Payments').addEventListener('change', async function(e) {
+        document.getElementById('file2Payments').addEventListener('change', async function (e) {
             const file = e.target.files[0];
             if (file) {
                 const label = document.getElementById('label2Payments');
@@ -1748,17 +1915,17 @@
                         <div class="file-info">Перевірка структури файлу</div>
                     </div>
                 `;
-                
+
                 const reader = new FileReader();
-                reader.onload = async function(e) {
+                reader.onload = async function (e) {
                     let arrayBuffer = e.target.result;
                     try {
                         // Конвертуємо .xls в .xlsx якщо потрібно
                         arrayBuffer = await convertXlsToXlsx(arrayBuffer, file.name);
-                        
+
                         const errors = await validateFile2Payments(arrayBuffer);
                         validationErrorsPayments = validationErrorsPayments.filter(e => !e.startsWith('Файл 2'));
-                        
+
                         if (errors.length > 0) {
                             validationErrorsPayments.push(...errors.map(e => `Файл 2: ${e}`));
                             label.classList.add('error');
@@ -1777,12 +1944,12 @@
                             file2DataPayments = null;
                         } else {
                             file2DataPayments = arrayBuffer;
-                            
+
                             const workbook = new ExcelJS.Workbook();
                             await workbook.xlsx.load(arrayBuffer);
                             const sheet = workbook.worksheets[0];
                             const paymentCount = sheet.rowCount - 4;
-                            
+
                             label.classList.add('has-file');
                             label.innerHTML = `
                                 <div class="file-icon">
@@ -1795,7 +1962,7 @@
                                     <div class="file-info">${paymentCount.toLocaleString('uk-UA')} платіжних транзакцій</div>
                                 </div>
                             `;
-                            
+
                             if (validationErrorsPayments.length === 0) {
                                 hideValidationErrorsPayments();
                             }
@@ -1817,19 +1984,34 @@
                         showValidationErrorsPayments(validationErrorsPayments);
                         file2DataPayments = null;
                     }
-                    
+
                     checkReadyToProcessPayments();
                 };
                 reader.readAsArrayBuffer(file);
             }
         });
 
+        document.getElementById('colMapFile1Name').addEventListener('change', checkReadyToProcessPayments);
+        document.getElementById('colMapFile1Contract').addEventListener('change', checkReadyToProcessPayments);
+        document.getElementById('colMapFile1Ipn').addEventListener('change', checkReadyToProcessPayments);
+        document.getElementById('colMapFile2Name').addEventListener('change', checkReadyToProcessPayments);
+        document.getElementById('colMapFile2Amount').addEventListener('change', checkReadyToProcessPayments);
+
         document.getElementById('monthSelectPayments').addEventListener('change', checkReadyToProcessPayments);
 
         function checkReadyToProcessPayments() {
             const monthSelected = document.getElementById('monthSelectPayments').value !== '';
+
+            const file1NameCol = document.getElementById('colMapFile1Name').value;
+            const file1ContractCol = document.getElementById('colMapFile1Contract').value;
+            const file1IpnCol = document.getElementById('colMapFile1Ipn').value;
+            const file2NameCol = document.getElementById('colMapFile2Name').value;
+            const file2AmountCol = document.getElementById('colMapFile2Amount').value;
+
+            const colsSelected = file1NameCol && file1ContractCol && file1IpnCol && file2NameCol && file2AmountCol;
+
             const btn = document.getElementById('processBtnPayments');
-            btn.disabled = !(file1DataPayments && file2DataPayments && monthSelected && validationErrorsPayments.length === 0);
+            btn.disabled = !(file1DataPayments && file2DataPayments && monthSelected && colsSelected && validationErrorsPayments.length === 0);
         }
 
         // PAYMENTS PROCESSING
@@ -1850,16 +2032,16 @@
             // Витягуємо номер договору до слова "від"
             // Приклад: "CL-214019 від 16.08.2019" -> "CL-214019"
             if (!text || typeof text !== 'string') return '';
-            
+
             const lines = text.split('\n');
             if (lines.length < 2) return '';
-            
+
             const contractLine = lines[1].trim();
             const parts = contractLine.split(' від ');
             if (parts.length > 0) {
                 return parts[0].trim();
             }
-            
+
             return contractLine;
         }
 
@@ -1892,7 +2074,7 @@
                 { title: 'Обробка платежів', desc: 'Зіставлення даних' },
                 { title: 'Створення файлу', desc: 'Генерація результату' }
             ]);
-            
+
             document.getElementById('processBtnPayments').disabled = true;
             hideValidationErrorsPayments();
 
@@ -1901,81 +2083,86 @@
                 await delay(500);
 
                 const monthColumn = document.getElementById('monthSelectPayments').value;
-                
+
+                // GET MAPPED COLUMNS
+                const f1NameIdx = parseInt(document.getElementById('colMapFile1Name').value);
+                const f1ContractIdx = parseInt(document.getElementById('colMapFile1Contract').value);
+                // IPN unused for processing logic itself, just for validation/location implicitly
+
+                const f2NameIdx = parseInt(document.getElementById('colMapFile2Name').value);
+                const f2AmountIdx = parseInt(document.getElementById('colMapFile2Amount').value);
+
                 const workbook1 = new ExcelJS.Workbook();
                 await workbook1.xlsx.load(file1DataPayments);
-                
+
                 const workbook2 = new ExcelJS.Workbook();
                 await workbook2.xlsx.load(file2DataPayments);
 
                 updateProgress(20, 2);
                 await delay(400);
-                
-                const zagalniySheet = workbook1.worksheets.find(sheet => 
+
+                const zagalniySheet = workbook1.worksheets.find(sheet =>
                     sheet.name.toLowerCase().trim() === 'загальний'
                 );
-                
+
                 if (!zagalniySheet) {
                     throw new Error('Аркуш "Загальний" не знайдено у файлі боржників');
                 }
-                
+
+                // Header check for naming collisions
                 const headerRow = zagalniySheet.getRow(1);
                 const headers = [];
-                let pipColumnIndex = -1;
-                
-                headerRow.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                headerRow.eachCell({ includeEmpty: true }, (cell) => {
                     headers.push(cell.value);
-                    if (cell.value === 'ПІП Позичальника') {
-                        pipColumnIndex = colNumber;
-                    }
                 });
-                
-                if (pipColumnIndex === -1) {
-                    throw new Error('Колонку "ПІП Позичальника" не знайдено');
-                }
 
                 updateProgress(30, 2);
                 await delay(300);
-                
+
                 let newColumnName = monthColumn;
                 let counter = 2;
                 while (headers.includes(newColumnName)) {
                     newColumnName = `${monthColumn} (${counter})`;
                     counter++;
                 }
-                
-                const newColumnIndex = pipColumnIndex + 1;
+
+                // Insert AFTER Name column
+                const newColumnIndex = f1NameIdx + 1;
 
                 updateProgress(40, 3);
                 await delay(500);
-                
+
                 // Збираємо платежі з Файлу 2
                 // Ключ: ПІБ + Номер договору
                 const sheet2 = workbook2.worksheets[0];
                 const payments = {}; // {identifier: сума}
                 const paymentDetails = {}; // Зберігаємо деталі для звіту
-                
+
+                // Start from row 5 as per "Accounting Report" usually having header clutter
+                // Or maybe start closer to 1 if user chose dynamic columns? 
+                // Providing a safe buffer (e.g. Row 2) might be better if dynamic. 
+                // But let's stick to 5 to avoid junk if top rows are empty/titles.
                 for (let i = 5; i <= sheet2.rowCount; i++) {
                     const row = sheet2.getRow(i);
-                    const pipCell = row.getCell(5); // Column E - ПІБ + договір
-                    const amountCell = row.getCell(10); // Column J - Сума
-                    
+                    const pipCell = row.getCell(f2NameIdx);
+                    const amountCell = row.getCell(f2AmountIdx);
+
                     if (pipCell.value && amountCell.value) {
                         const cellText = pipCell.value.toString();
                         const lines = cellText.split('\n');
-                        
+
                         if (lines.length >= 2) {
                             const pipName = lines[0].trim();
                             const contractNumber = extractContractNumber(cellText);
-                            
+
                             if (pipName && contractNumber) {
                                 const identifier = createIdentifier(pipName, contractNumber);
                                 const amount = parseFloat(amountCell.value);
-                                
+
                                 if (!isNaN(amount)) {
                                     // Якщо вже є платіж з таким ключем - додаємо до суми
                                     payments[identifier] = (payments[identifier] || 0) + amount;
-                                    
+
                                     // Зберігаємо деталі для звіту
                                     if (!paymentDetails[identifier]) {
                                         paymentDetails[identifier] = {
@@ -1990,7 +2177,7 @@
                         }
                     }
                 }
-                
+
                 const paymentCount = Object.keys(payments).length;
                 updateProgress(50, 4);
                 await delay(400);
@@ -1998,20 +2185,15 @@
                 // Створюємо мапу боржників: {identifier: [rowIndex1, rowIndex2, ...]}
                 // Один ідентифікатор може мати кілька рядків (дублікати)
                 const debtorsMap = {};
-                const contractColumnIndex = headers.indexOf('Номер кредитного договору') + 1;
-                
-                if (contractColumnIndex === 0) {
-                    throw new Error('Колонку "Номер кредитного договору" не знайдено');
-                }
-                
+
                 for (let i = 2; i <= zagalniySheet.rowCount; i++) {
                     const row = zagalniySheet.getRow(i);
-                    const pipCell = row.getCell(pipColumnIndex);
-                    const contractCell = row.getCell(contractColumnIndex);
-                    
+                    const pipCell = row.getCell(f1NameIdx);
+                    const contractCell = row.getCell(f1ContractIdx);
+
                     if (pipCell.value && contractCell.value) {
                         const identifier = createIdentifier(pipCell.value, contractCell.value);
-                        
+
                         if (!debtorsMap[identifier]) {
                             debtorsMap[identifier] = [];
                         }
@@ -2021,50 +2203,50 @@
 
                 updateProgress(60, 5);
                 await delay(300);
-                
+
                 zagalniySheet.spliceColumns(newColumnIndex, 0, []);
-                
+
                 const newHeaderCell = zagalniySheet.getRow(1).getCell(newColumnIndex);
                 newHeaderCell.value = newColumnName;
-                
-                const referenceCell = zagalniySheet.getRow(1).getCell(pipColumnIndex);
+
+                const referenceCell = zagalniySheet.getRow(1).getCell(f1NameIdx);
                 if (referenceCell.style) {
                     newHeaderCell.style = Object.assign({}, referenceCell.style);
                 }
 
                 updateProgress(70, 6);
                 await delay(600);
-                
+
                 let matchedCount = 0;
                 let totalAmount = 0;
                 let processedCount = 0;
                 const notFoundPeople = []; // Для тих, кого не знайдено
-                
+
                 for (const [identifier, amount] of Object.entries(payments)) {
                     processedCount++;
-                    
+
                     if (processedCount % 5 === 0) {
                         const progress = 70 + (processedCount / paymentCount) * 20;
                         updateProgress(progress, 6);
                         await delay(50);
                     }
-                    
+
                     const rowIndexes = debtorsMap[identifier];
-                    
+
                     if (rowIndexes && rowIndexes.length > 0) {
                         // Вставляємо суму в усі знайдені рядки (якщо є дублікати)
                         for (const rowIndex of rowIndexes) {
                             const row = zagalniySheet.getRow(rowIndex);
                             const cell = row.getCell(newColumnIndex);
                             cell.value = amount;
-                            
-                            const referenceCell = row.getCell(pipColumnIndex);
+
+                            const referenceCell = row.getCell(f1NameIdx);
                             if (referenceCell.style) {
                                 cell.style = Object.assign({}, referenceCell.style);
                             }
-                            
+
                             cell.numFmt = '#,##0.00';
-                            
+
                             matchedCount++;
                             totalAmount += amount;
                         }
@@ -2083,15 +2265,29 @@
 
                 updateProgress(90, 7);
                 await delay(500);
-                
+
+                // Unhide all rows/columns in the output
+                // zagalniySheet is our target sheet in workbook1
+                zagalniySheet.eachRow((row) => {
+                    row.hidden = false;
+                });
+
+                // Also unhide columns if any are hidden
+                for (let i = 1; i <= zagalniySheet.columnCount; i++) {
+                    const col = zagalniySheet.getColumn(i);
+                    if (col.hidden) {
+                        col.hidden = false;
+                    }
+                }
+
                 processedWorkbookPayments = workbook1;
 
                 updateProgress(100, 7);
                 await delay(500);
-                
+
                 hideProgress();
                 displayResultsPayments(matchedCount, totalAmount, notFoundPeople, newColumnName, paymentCount);
-                
+
             } catch (error) {
                 hideProgress();
                 alert('Помилка обробки: ' + error.message);
@@ -2103,7 +2299,7 @@
 
         function displayResultsPayments(matchedCount, totalAmount, notFoundPeople, columnName, totalPayments) {
             const resultsDiv = document.getElementById('resultsPayments');
-            
+
             let html = `
                 <div class="result-item success">
                     <div class="result-title">Обробку завершено</div>
@@ -2115,7 +2311,7 @@
                     </div>
                 </div>
             `;
-            
+
             if (notFoundPeople.length > 0) {
                 const notFoundAmount = notFoundPeople.reduce((sum, p) => sum + p.amount, 0);
                 html += `
@@ -2125,27 +2321,27 @@
                             Кількість: <strong>${notFoundPeople.length}</strong><br>
                             Загальна сума: <strong>${formatNumber(notFoundAmount)} грн</strong>
                             <div class="not-found-list">
-                                ${notFoundPeople.map(p => 
-                                    `<div>
+                                ${notFoundPeople.map(p =>
+                    `<div>
                                         <div>
                                             <strong>${p.name}</strong><br>
                                             <span style="font-size: 12px; color: var(--gray-500);">Договір: ${p.contract}</span>
                                         </div>
                                         <span>${formatNumber(p.amount)} грн</span>
                                     </div>`
-                                ).join('')}
+                ).join('')}
                             </div>
                         </div>
                     </div>
                 `;
             }
-            
+
             html += `
                 <button class="download-btn" onclick="downloadFilePayments()">
                     <span>Завантажити оброблений файл</span>
                 </button>
             `;
-            
+
             resultsDiv.innerHTML = html;
             resultsDiv.classList.add('show');
         }
@@ -2156,13 +2352,13 @@
                     .replace('Оплата ', '')
                     .replace(/ /g, '_');
                 const fileName = `Реєстр_боржників_${monthName}.xlsx`;
-                
+
                 const buffer = await processedWorkbookPayments.xlsx.writeBuffer();
-                
-                const blob = new Blob([buffer], { 
-                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+
+                const blob = new Blob([buffer], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 });
-                
+
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
@@ -2183,19 +2379,19 @@
         let file2SelectedColumnIban = null;
         let resultWorkbookIban = null;
 
-        document.getElementById('file1Iban').addEventListener('change', function(e) {
+        document.getElementById('file1Iban').addEventListener('change', function (e) {
             handleFileUploadIban(e.target.files[0], 1);
         });
 
-        document.getElementById('file2Iban').addEventListener('change', function(e) {
+        document.getElementById('file2Iban').addEventListener('change', function (e) {
             handleFileUploadIban(e.target.files[0], 2);
         });
 
-        document.getElementById('file1ColumnIban').addEventListener('change', function(e) {
+        document.getElementById('file1ColumnIban').addEventListener('change', function (e) {
             handleColumnSelectionIban(1, e.target.value);
         });
 
-        document.getElementById('file2ColumnIban').addEventListener('change', function(e) {
+        document.getElementById('file2ColumnIban').addEventListener('change', function (e) {
             handleColumnSelectionIban(2, e.target.value);
         });
 
@@ -2209,23 +2405,23 @@
             const select = document.getElementById(`file${fileNumber}ColumnIban`);
 
             const reader = new FileReader();
-            
-            reader.onload = function(e) {
+
+            reader.onload = function (e) {
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
-                    
+
                     const firstSheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[firstSheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-                    
+
                     const fileData = {
                         name: file.name,
                         workbook: workbook,
                         sheetName: firstSheetName,
                         allRows: jsonData
                     };
-                    
+
                     if (fileNumber === 1) {
                         file1DataIban = fileData;
                         file1SelectedColumnIban = null;
@@ -2233,7 +2429,7 @@
                         file2DataIban = fileData;
                         file2SelectedColumnIban = null;
                     }
-                    
+
                     label.classList.add('has-file');
                     const rowCount = jsonData.length - 1;
                     label.innerHTML = `
@@ -2247,7 +2443,7 @@
                             <div class="file-info">${rowCount.toLocaleString('uk-UA')} записів завантажено</div>
                         </div>
                     `;
-                    
+
                     const maxCols = Math.max(...jsonData.map(row => row.length));
                     select.innerHTML = '<option value="">Оберіть колонку з IBAN</option>';
                     for (let i = 0; i < maxCols; i++) {
@@ -2256,14 +2452,14 @@
                         select.innerHTML += `<option value="${i}">${colLetter} - ${firstValue}</option>`;
                     }
                     select.classList.remove('hidden');
-                    
+
                     checkIfReadyToGenerateIban();
-                    
+
                 } catch (error) {
                     alert(`Помилка читання файлу: ${error.message}`);
                 }
             };
-            
+
             reader.readAsArrayBuffer(file);
         }
 
@@ -2277,53 +2473,53 @@
                 checkIfReadyToGenerateIban();
                 return;
             }
-            
+
             const colIndex = parseInt(columnIndex);
-            
+
             if (fileNumber === 1) {
                 file1SelectedColumnIban = colIndex;
             } else {
                 file2SelectedColumnIban = colIndex;
             }
-            
+
             checkIfReadyToGenerateIban();
         }
 
         function checkIfReadyToGenerateIban() {
-            const canGenerate = file1DataIban && file2DataIban && 
-                               file1SelectedColumnIban !== null && 
-                               file2SelectedColumnIban !== null;
-            
+            const canGenerate = file1DataIban && file2DataIban &&
+                file1SelectedColumnIban !== null &&
+                file2SelectedColumnIban !== null;
+
             document.getElementById('generateBtnIban').disabled = !canGenerate;
-            
+
             if (canGenerate) {
                 updateStatsIban();
             }
         }
 
         function updateStatsIban() {
-            if (!file1DataIban || !file2DataIban || 
+            if (!file1DataIban || !file2DataIban ||
                 file1SelectedColumnIban === null || file2SelectedColumnIban === null) return;
-            
+
             const values1 = [];
             file1DataIban.allRows.forEach((row, idx) => {
                 if (idx > 0 && row[file1SelectedColumnIban]) {
                     values1.push(String(row[file1SelectedColumnIban]).trim());
                 }
             });
-            
+
             const values2 = [];
             file2DataIban.allRows.forEach((row, idx) => {
                 if (idx > 0 && row[file2SelectedColumnIban]) {
                     values2.push(String(row[file2SelectedColumnIban]).trim());
                 }
             });
-            
+
             const set2 = new Set(values2);
             const uniqueIBANs1 = [...new Set(values1)];
             const excludedCount = uniqueIBANs1.filter(x => set2.has(x)).length;
             const resultCount = uniqueIBANs1.filter(x => !set2.has(x)).length;
-            
+
             document.getElementById('statFile1Iban').textContent = values1.length.toLocaleString('uk-UA');
             document.getElementById('statFile2Iban').textContent = values2.length.toLocaleString('uk-UA');
             document.getElementById('statExcludedIban').textContent = excludedCount.toLocaleString('uk-UA');
@@ -2337,30 +2533,30 @@
                 { title: 'Фільтрація', desc: 'Виключення рахунків' },
                 { title: 'Створення файлу', desc: 'Генерація результату' }
             ]);
-            
+
             try {
                 updateProgress(10, 1);
                 await delay(300);
-                
+
                 updateProgress(25, 1);
                 await delay(300);
-                
+
                 updateProgress(30, 2);
                 await delay(300);
-                
+
                 const values2Set = new Set();
                 file2DataIban.allRows.forEach((row, idx) => {
                     if (idx > 0 && row[file2SelectedColumnIban]) {
                         values2Set.add(String(row[file2SelectedColumnIban]).trim());
                     }
                 });
-                
+
                 updateProgress(50, 2);
                 await delay(400);
-                
+
                 updateProgress(55, 3);
                 await delay(300);
-                
+
                 const resultRows = [file1DataIban.allRows[0]];
                 file1DataIban.allRows.forEach((row, idx) => {
                     if (idx > 0) {
@@ -2370,29 +2566,29 @@
                         }
                     }
                 });
-                
+
                 updateProgress(75, 3);
                 await delay(400);
-                
+
                 updateProgress(80, 4);
                 await delay(300);
-                
+
                 const wb = XLSX.utils.book_new();
-                
+
                 const ws1 = XLSX.utils.aoa_to_sheet(file1DataIban.allRows);
                 formatIBANColumn(ws1, file1SelectedColumnIban, file1DataIban.allRows.length);
                 XLSX.utils.book_append_sheet(wb, ws1, 'Всі рахунки');
-                
+
                 updateProgress(85, 4);
                 await delay(200);
-                
+
                 const ws2 = XLSX.utils.aoa_to_sheet(file2DataIban.allRows);
                 formatIBANColumn(ws2, file2SelectedColumnIban, file2DataIban.allRows.length);
                 XLSX.utils.book_append_sheet(wb, ws2, 'Зарплатні');
-                
+
                 updateProgress(90, 4);
                 await delay(200);
-                
+
                 const resultRowsRenamed = resultRows.map((row, idx) => {
                     if (idx === 0) {
                         const newRow = [...row];
@@ -2402,21 +2598,21 @@
                     }
                     return row;
                 });
-                
+
                 const ws3 = XLSX.utils.aoa_to_sheet(resultRowsRenamed);
                 formatIBANColumn(ws3, file1SelectedColumnIban, resultRowsRenamed.length);
                 XLSX.utils.book_append_sheet(wb, ws3, 'Результат');
-                
+
                 resultWorkbookIban = wb;
-                
+
                 updateProgress(100, 4);
                 await delay(500);
-                
+
                 hideProgress();
-                
+
                 document.getElementById('successMessageIban').classList.add('show');
                 document.getElementById('downloadBtnIban').classList.remove('hidden');
-                
+
             } catch (error) {
                 hideProgress();
                 alert(`Помилка: ${error.message}`);
@@ -2425,11 +2621,11 @@
 
         function formatIBANColumn(worksheet, columnIndex, rowCount) {
             const colLetter = XLSX.utils.encode_col(columnIndex);
-            
+
             for (let row = 0; row < rowCount; row++) {
                 const cellAddress = colLetter + (row + 1);
                 const cell = worksheet[cellAddress];
-                
+
                 if (cell && cell.v) {
                     const cellValue = String(cell.v).trim();
                     cell.t = 's';
@@ -2442,15 +2638,15 @@
 
         function downloadResultsIban() {
             if (!resultWorkbookIban) return;
-            
+
             try {
-                const wbout = XLSX.write(resultWorkbookIban, { 
-                    bookType: 'xlsx', 
+                const wbout = XLSX.write(resultWorkbookIban, {
+                    bookType: 'xlsx',
                     type: 'array',
                     cellDates: false,
                     bookSST: false
                 });
-                
+
                 const blob = new Blob([wbout], { type: 'application/octet-stream' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
@@ -2460,11 +2656,12 @@
                 link.click();
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
-                
+
             } catch (error) {
                 alert(`Помилка завантаження: ${error.message}`);
             }
         }
     </script>
 </body>
+
 </html>
